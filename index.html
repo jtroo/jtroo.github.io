@@ -1,4 +1,43 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
+
+<style>
+.monospace {
+  font-family: monospace, monospace;
+}
+
+.multiline {
+  white-space: pre;
+}
+</style>
+
+<script type="module" src="input.js"></script>
+<script type="module" src="wasm_state_machine.js"></script>
+
 <html>
-<h1>Hello World</h1>
-</html> 
+  <h1>Kanata config tester + simulator</h1>
+  <body>
+    <p>
+      <textarea
+        title="config"
+        id="config"
+        name="config"
+        class="monospace"
+        rows="5"
+        cols="50"
+      ></textarea>
+      <textarea
+        title="simulated input"
+        id="siminput"
+        name="siminput"
+        class="monospace"
+        rows="5"
+        cols="50"
+      ></textarea>
+    </p>
+    <p>
+      <button onclick="testConfig()">Test config</button>
+      <button onclick="simulateInput()">Simulate input</button>
+    </p>
+    <p id="result" class="multiline monospace"></p>
+  </body>
+</html>
