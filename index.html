@@ -28,7 +28,36 @@
             ></textarea>
           </div>
           <div>
-            <label for="siminput">Simulated input</label>
+            <div class="simheader">
+              <label id="siminput-title" for="siminput">Simulated input</label>
+              <button id="showInputFormat" class="button">Show input format</label>
+            </div>
+            <div>
+              <dialog id="inputFormat" class="modal">
+                <div class="modal-header">
+                  <h3>Simulated input format</h3>
+                  <button id="closeInputFormat" class="button">Close</label>
+                </div>
+                <p>
+                  The input format is <code>action:item</code>.
+                  Valid actions are:
+                  <table>
+                    <tr><td><code>d | down</code></td> <td>: key down</td></tr>
+                    <tr><td><code>u | up</code></td> <td>: key up</td></tr>
+                    <tr><td><code>t | tick</code></td> <td>: advance time</td></tr>
+                  </table>
+                <p style="max-width: 600px">
+                  The items for key up/down actions are a single key name
+                  like what you would use in <code>defsrc</code>.
+                  The items for tick actions are a single number
+                  representing the number of milliseconds to advance time by.
+                  <br/><br/>
+                  Example:<br/><br/>
+                  <code class="multiline">d:a t:50 u:a t:50
+d:b t:50 u:b t:50</code>
+                </p>
+              </dialog>
+            </div>
             <textarea
               title="simulated input"
               id="siminput"
@@ -43,29 +72,7 @@
       </div>
       <div class="center box2">
         <div class="justify-left box2-inner">
-          <div>
-            <details style="margin-top: 20px">
-              <summary>Simulated input format</summary>
-              <p>
-                The input format is <code>action:item</code>.
-                Valid actions are:
-              </p>
-              <table>
-                <tr><td><code>d | down</code></td> <td>: key down</td></tr>
-                <tr><td><code>u | up</code></td> <td>: key up</td></tr>
-                <tr><td><code>t | tick</code></td> <td>: advance time</td></tr>
-              </table>
-              <p style="max-width: 600px">
-                The items for key up/down actions are a single key name
-                like what you would use in <code>defsrc</code>.
-                The items for tick actions are a single number
-                representing the number of milliseconds to advance time by.
-              </p>
-              <p>Example:</p>
-              <code class="multiline">d:a t:50 u:a t:50
-d:b t:50 u:b t:50</code>
-            </details>
-          </div>
+          <h4 id="actions-title">Actions:</h4>
           <div style="margin-top: 15px">
             <button class="button" onclick="testConfig()">Test config</button>
             <button class="button" style="margin-left: 10px"
@@ -79,3 +86,5 @@ d:b t:50 u:b t:50</code>
     </div>
   </body>
 </html>
+
+<script src="modal.js"></script>

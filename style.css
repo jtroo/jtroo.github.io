@@ -62,6 +62,7 @@ textarea:focus {
   }
 }
 
+/* wide view: 2 columns */
 @media only screen and (min-width: 1200px) {
   .grid {
     grid-template-columns: 1fr 1fr;
@@ -84,9 +85,26 @@ textarea:focus {
     font-size: 14px;
     max-height: 400px;
   }
+
+  .modal {
+    max-width: 620px;
+  }
+
+  #actions-title {
+    visibility: visible;
+    margin-bottom: 0px;
+  }
 }
 
 @media only screen and (min-width: 650px) and (max-width: 1200px) {
+  #actions-title {
+    visibility: hidden;
+    height: 0px;
+    width: 0px;
+    padding: 0;
+    margin: 0;
+  }
+
   .justify-left {
     min-width: 610px;
   }
@@ -95,10 +113,22 @@ textarea:focus {
     font-size: 14px;
     max-height: 200px;
   }
+
+  .modal {
+    max-width: 620px;
+  }
 }
 
 /* narrow css */
 @media only screen and (max-width: 650px) {
+  #actions-title {
+    visibility: hidden;
+    height: 0px;
+    width: 0px;
+    padding: 0;
+    margin: 0;
+  }
+
   #result {
     font-size: 2.1vw;
     max-height: 200px;
@@ -111,16 +141,16 @@ textarea:focus {
   .justify-left {
     width: 100%;
   }
+
+  .modal {
+    max-width: 85%;
+  }
 }
 
 label {
   display: block;
   margin-bottom: 10px;
   margin-top: 20px;
-}
-
-details {
-  display: inline-block;
 }
 
 /* global light and dark themes */
@@ -191,4 +221,40 @@ details {
     background-color: #262543;
     transition: none 0s;
   }
+}
+
+/* modal css */
+.modal {
+  border: 1px solid;
+  border-radius: 6px;
+}
+.modal-header {
+  line-height: 70px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-header h3 {
+	margin: 0;
+  box-sizing: border-box;
+  padding: 12px 15px 0 10px;
+  line-height: 50px;
+  display: inline-block;
+}
+#closeInputFormat {
+  padding-right: 15px
+}
+::backdrop {
+  opacity: 0.7;
+  background-color: #000;
+}
+
+.simheader {
+  display: flex;
+  align-items: center;
+}
+#siminput-title {
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
