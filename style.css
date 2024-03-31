@@ -1,7 +1,7 @@
 * {
   font-family: sans-serif;
   /* uncomment to see how big stuff is*/
-  /*border-style:solid;*/
+  /* border-style:solid; */
 }
 
 h1, h2 {
@@ -42,10 +42,6 @@ code {
   white-space: pre;
 }
 
-.grid {
-  display: grid;
-}
-
 #result {
   overflow-y: scroll;
 }
@@ -77,6 +73,7 @@ textarea:focus {
 /* wide view: 2 columns */
 @media only screen and (min-width: 1200px) {
   .grid {
+    display: grid;
     grid-template-columns: 1fr 1fr;
   }
 
@@ -93,9 +90,14 @@ textarea:focus {
     width: 100%;
   }
 
+  .result-container {
+    width: 100%;
+  }
+
   #result {
     font-size: 14px;
     max-height: 400px;
+    width: 100%;
   }
 
   .modal {
@@ -108,7 +110,7 @@ textarea:focus {
   }
 }
 
-@media only screen and (min-width: 500px) and (max-width: 1200px) {
+@media only screen and (min-width: 550px) and (max-width: 1200px) {
   #actions-title {
     visibility: hidden;
     height: 0px;
@@ -120,15 +122,25 @@ textarea:focus {
   #result {
     font-size: 14px;
     max-height: 200px;
+    width: 100%;
+  }
+
+  .result-container {
+    width: 550px;
   }
 
   .modal {
     max-width: 620px;
   }
+
+  .box2-inner {
+    max-width: 448px;
+    min-width: 448px;
+  }
 }
 
 /* narrow css */
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 550px) {
   #actions-title {
     visibility: hidden;
     height: 0px;
