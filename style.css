@@ -237,7 +237,6 @@ label {
   border-radius: 6px;
 }
 .modal-header {
-  line-height: 70px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
@@ -246,12 +245,11 @@ label {
 .modal-header h3 {
 	margin: 0;
   box-sizing: border-box;
-  padding: 12px 15px 0 10px;
   line-height: 50px;
   display: inline-block;
 }
 #closeInputFormat {
-  padding-right: 15px
+  margin-right: 5px
 }
 ::backdrop {
   opacity: 0.7;
