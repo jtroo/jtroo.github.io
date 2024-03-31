@@ -41,6 +41,17 @@ details {
   display: inline-block;
 }
 
+* {
+  background: #fffff8;
+  color: #222;
+}
+@media (prefers-color-scheme: dark) {
+ * {
+    background: #222;
+    color: #fffff8;
+  }
+}
+
 </style>
 
 <script type="module" src="input.js"></script>
@@ -78,8 +89,10 @@ details {
       <div>
         <details style="margin-top: 20px">
           <summary>Simulated input format</summary>
-          <p>The input format is <code>action:item</code>.</p>
-          <p>Valid actions are:</p>
+          <p>
+            The input format is <code>action:item</code>.
+            Valid actions are:
+          </p>
           <table>
             <tr><td><code>d | down</code></td> <td>: key down</td></tr>
             <tr><td><code>u | up</code></td> <td>: key up</td></tr>
