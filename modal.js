@@ -10,13 +10,11 @@ function closeModalWithKeys(event) {
   }
 };
 
-// "Show the dialog" button opens the dialog modally
 showButton.addEventListener("click", () => {
   dialog.showModal();
   addEventListener('keydown', closeModalWithKeys);
 });
 
-// "Close" button closes the dialog
 closeButton.addEventListener("click", () => {
   dialog.close();
   removeEventListener('keydown', closeModalWithKeys);

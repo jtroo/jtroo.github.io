@@ -1,6 +1,6 @@
 * {
   font-family: sans-serif;
-  /* uncomment to see how big stuff is*/
+  /* uncomment to see boxes of all elements */
   /* border-style:solid; */
 }
 
@@ -70,46 +70,40 @@ textarea:focus {
   padding-bottom: 5px;
 }
 
-/* wide view: 2 columns */
+/* wide view: 2 columns, e.g. full desktop */
 @media only screen and (min-width: 1200px) {
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-
   .box1 {
     padding: 0px 10px 10px 10px;
     text-align: right;
   }
-
   .box2 {
     padding: 0px 10px 10px 30px;
   }
-
   .box2-inner {
     width: 100%;
   }
-
   .result-container {
     width: 100%;
   }
-
   #result {
     font-size: 14px;
     max-height: 400px;
     width: 100%;
   }
-
   .modal {
     max-width: 620px;
   }
-
   #actions-title {
     visibility: visible;
     margin-bottom: 0px;
   }
 }
 
+/* medium width css, e.g. half-page desktop */
 @media only screen and (min-width: 550px) and (max-width: 1200px) {
   #actions-title {
     visibility: hidden;
@@ -118,24 +112,21 @@ textarea:focus {
     padding: 0;
     margin: 0;
   }
-
   #result {
     font-size: 14px;
     max-height: 200px;
     min-width: 448px;
   }
-
   .modal {
     max-width: 620px;
   }
-
   .box2-inner {
     max-width: 448px;
     min-width: 448px;
   }
 }
 
-/* narrow css */
+/* narrow css, e.g. mobile */
 @media only screen and (max-width: 550px) {
   #actions-title {
     visibility: hidden;
@@ -144,20 +135,16 @@ textarea:focus {
     padding: 0;
     margin: 0;
   }
-
   #result {
     font-size: 2.1vw;
     max-height: 200px;
   }
-
   textarea.monospace {
     font-size: 2.9vw;
   }
-
   .justify-left {
     width: 100%;
   }
-
   .modal {
     max-width: 85%;
   }
@@ -170,7 +157,6 @@ label {
 }
 
 /* global light and dark themes */
-
 * {
   background: #fffff8;
   color: #222;
@@ -182,6 +168,7 @@ label {
   }
 }
 
+/* pink button css */
 .button {
   appearance: none;
   background-color: #fff1fb;
@@ -203,36 +190,29 @@ label {
   white-space: nowrap;
   word-wrap: break-word;
 }
-
 .button:hover {
   background-color: #ffe7f8;
   transition-duration: 0.1s;
 }
-
 .button:active {
   background-color: #f4eeff;
   transition: none 0s;
 }
-
 .button:before {
   display: none;
 }
-
 .button:-webkit-details-marker {
   display: none;
 }
-
 @media (prefers-color-scheme: dark) {
   .button {
     background-color: #40313c;
     border: 1px solid #fefefe;
   }
-
   .button:hover {
     background-color: #4d2643;
     transition-duration: 0.1s;
   }
-
   .button:active {
     background-color: #262543;
     transition: none 0s;
