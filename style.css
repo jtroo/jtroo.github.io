@@ -38,6 +38,10 @@ code {
   display: grid;
 }
 
+#result {
+  overflow-y: scroll;
+}
+
 @media only screen and (min-width: 1200px) {
   .grid {
     grid-template-columns: 1fr 1fr;
@@ -57,8 +61,8 @@ code {
   }
 
   #result {
-    overflow-y: scroll;
-    height: 400px;
+    font-size: 14px;
+    max-height: 400px;
   }
 }
 
@@ -69,7 +73,7 @@ code {
 
   #result {
     font-size: 14px;
-    height: 300px;
+    max-height: 200px;
   }
 }
 
@@ -77,7 +81,7 @@ code {
 @media only screen and (max-width: 650px) {
   #result {
     font-size: 2.1vw;
-    height: 200px;
+    max-height: 200px;
   }
 
   textarea.monospace {
