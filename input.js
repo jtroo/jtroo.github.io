@@ -2,8 +2,6 @@ import initSync, { init, check_config, simulate } from './kanata_wasm.js';
 
 initSync();
 
-var is_init = false;
-
 function testConfig() {
   init();
   var cfg = document.getElementById("config").value;
