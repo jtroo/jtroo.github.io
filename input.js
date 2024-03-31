@@ -1,4 +1,4 @@
-import initSync, { init, check_config, simulate } from './wasm_state_machine.js';
+import initSync, { init, check_config, simulate } from './kanata_wasm.js';
 
 initSync();
 

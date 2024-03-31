@@ -1,128 +1,81 @@
 <!DOCTYPE html>
 
-<style>
-
-* {
-  font-family: sans-serif;
-}
-
-body {
-  text-align: center;
-}
-
-h1, h2 {
-  text-align: center;
-}
-
-body > div {
-  display: inline-block;
-  text-align: left;
-}
-
-.monospace {
-  font-family: monospace, monospace;
-}
-
-code {
-  font-family: monospace, monospace;
-}
-
-.multiline {
-  white-space: pre;
-}
-
-label {
-  display: block;
-  margin-bottom: 10px;
-  margin-top: 20px;
-}
-
-details {
-  display: inline-block;
-}
-
-* {
-  background: #fffff8;
-  color: #222;
-}
-@media (prefers-color-scheme: dark) {
- * {
-    background: #222;
-    color: #fffff8;
-  }
-}
-
-</style>
-
+<link rel="stylesheet" href="style.css">
 <script type="module" src="input.js"></script>
-<script type="module" src="wasm_state_machine.js"></script>
+<script type="module" src="kanata_wasm.js"></script>
 
 <html>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <head>
     <title>Kanata cfg+sim</title>
   </head>
+  <h1>Kanata config tester + simulator</h1>
+  <h2>v1.6.0-prerelease-3</h2>
   <body>
-    <div>
-      <div>
-        <h1>Kanata config tester + simulator</h1>
-        <h2>v1.6.0-prerelease-3</h2>
+    <div class="center grid">
+      <div class="box1">
+        <div class="justify-left">
+          <div>
+            <label for="config">Configuration</label>
+            <textarea
+              title="config"
+              id="config"
+              name="config"
+              class="monospace"
+              spellcheck="false"
+              rows="4"
+              cols="50"
+            ></textarea>
+          </div>
+          <div>
+            <label for="siminput">Simulated input</label>
+            <textarea
+              title="simulated input"
+              id="siminput"
+              name="siminput"
+              class="monospace"
+              spellcheck="false"
+              rows="4"
+              cols="50"
+            ></textarea>
+          </div>
+        </div>
       </div>
-      <div>
-        <label for="config">Configuration</label>
-        <textarea
-          title="config"
-          id="config"
-          name="config"
-          class="monospace"
-          spellcheck="false"
-          rows="4"
-          cols="80"
-        ></textarea>
-        <label for="siminput">Simulated input</label>
-        <textarea
-          title="simulated input"
-          id="siminput"
-          name="siminput"
-          class="monospace"
-          spellcheck="false"
-          rows="4"
-          cols="80"
-        ></textarea>
-      </div>
-      <div>
-        <details style="margin-top: 20px">
-          <summary>Simulated input format</summary>
-          <p>
-            The input format is <code>action:item</code>.
-            Valid actions are:
-          </p>
-          <table>
-            <tr><td><code>d | down</code></td> <td>: key down</td></tr>
-            <tr><td><code>u | up</code></td> <td>: key up</td></tr>
-            <tr><td><code>t | tick</code></td> <td>: advance time</td></tr>
-          </table>
-          <p style="max-width: 700px">
-            The items for key up/down actions are a single key name
-            like what you would use in <code>defsrc</code>.
-            The items for tick actions are a single number
-            representing the number of milliseconds to advance time by.
-          </p>
-          <p>Example:</p>
-          <code class="multiline">d:a
+      <div class="center box2">
+        <div class="justify-left box2-inner">
+          <div>
+            <details style="margin-top: 20px">
+              <summary>Simulated input format</summary>
+              <p>
+                The input format is <code>action:item</code>.
+                Valid actions are:
+              </p>
+              <table>
+                <tr><td><code>d | down</code></td> <td>: key down</td></tr>
+                <tr><td><code>u | up</code></td> <td>: key up</td></tr>
+                <tr><td><code>t | tick</code></td> <td>: advance time</td></tr>
+              </table>
+              <p style="max-width: 600px">
+                The items for key up/down actions are a single key name
+                like what you would use in <code>defsrc</code>.
+                The items for tick actions are a single number
+                representing the number of milliseconds to advance time by.
+              </p>
+              <p>Example:</p>
+              <code class="multiline">d:a
 t:50
 u:a
 t:50</code>
-        </details>
-      </div>
-      <div style="margin-top: 20px">
-        <button onclick="testConfig()">Test config</button>
-        <button onclick="simulateInput()">Simulate input</button>
-      </div>
-      <div>
-        <textarea readonly
-          id="result" class="monospace"
-          rows="12" cols="80"
-        ></textarea>
+            </details>
+          </div>
+          <div style="margin-top: 20px">
+            <button onclick="testConfig()">Test config</button>
+            <button onclick="simulateInput()">Simulate input</button>
+          </div>
+          <div>
+            <p id="result" class="monospace multiline"></p>
+          </div>
+        </div>
       </div>
     </div>
   </body>

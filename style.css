@@ -1,0 +1,113 @@
+* {
+  font-family: sans-serif;
+  /* uncomment to see how big stuff is*/
+  /*border-style:solid;*/
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+body {
+  padding: 10px;
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+
+.justify-left {
+  display: inline-block;
+  text-align: left;
+}
+
+.monospace {
+  font-family: monospace, monospace;
+}
+
+code {
+  font-family: monospace, monospace;
+}
+
+.multiline {
+  white-space: pre;
+}
+
+.grid {
+  display: grid;
+}
+
+@media only screen and (min-width: 1200px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .box1 {
+    padding: 10px;
+    text-align: right;
+  }
+
+  .box2 {
+    padding: 10px;
+  }
+
+  .box2-inner {
+    width: 100%;
+  }
+
+  #result {
+    overflow-y: scroll;
+    height: 400px;
+  }
+}
+
+@media only screen and (min-width: 650px) and (max-width: 1200px) {
+  .justify-left {
+    min-width: 610px;
+  }
+
+  #result {
+    font-size: 14px;
+    height: 300px;
+  }
+}
+
+/* mobile css */
+@media only screen and (max-width: 650px) {
+  #result {
+    font-size: 2.1vw;
+    height: 200px;
+  }
+
+  textarea.monospace {
+    font-size: 2.9vw;
+  }
+
+  .justify-left {
+    width: 100%;
+  }
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+details {
+  display: inline-block;
+}
+
+/* global light and dark themes */
+
+* {
+  background: #fffff8;
+  color: #222;
+}
+@media (prefers-color-scheme: dark) {
+  * {
+    background: #222;
+    color: #fffff8;
+  }
+}
