@@ -66,6 +66,10 @@ textarea:focus {
   }
 }
 
+.box1 {
+  padding-bottom: 5px;
+}
+
 /* wide view: 2 columns */
 @media only screen and (min-width: 1200px) {
   .grid {
@@ -78,7 +82,7 @@ textarea:focus {
   }
 
   .box2 {
-    padding: 10px;
+    padding: 10px 10px 10px 30px;
   }
 
   .box2-inner {
