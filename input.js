@@ -16,6 +16,9 @@ function simulateInput() {
   var cfg = document.getElementById("config").value;
   var sim = document.getElementById("siminput").value;
   var out = simulate(cfg, sim)
+  if (!out.trim()) {
+    out = "No output events from simulation.\nMake sure to simulate time via t:<number>";
+  }
   document.getElementById("result").textContent = out;
 }
 

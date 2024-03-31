@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 
 <style>
+
+h1 {
+  font-family: sans-serif;
+}
+
+body {
+  text-align: center;
+}
+
+body > div {
+  display: inline-block;
+  text-align: left;
+}
+
 .monospace {
   font-family: monospace, monospace;
 }
@@ -14,30 +28,36 @@
 <script type="module" src="wasm_state_machine.js"></script>
 
 <html>
-  <h1>Kanata config tester + simulator</h1>
   <body>
-    <p>
-      <textarea
-        title="config"
-        id="config"
-        name="config"
-        class="monospace"
-        rows="5"
-        cols="50"
-      ></textarea>
-      <textarea
-        title="simulated input"
-        id="siminput"
-        name="siminput"
-        class="monospace"
-        rows="5"
-        cols="50"
-      ></textarea>
-    </p>
-    <p>
-      <button onclick="testConfig()">Test config</button>
-      <button onclick="simulateInput()">Simulate input</button>
-    </p>
-    <p id="result" class="multiline monospace"></p>
+    <div>
+      <div>
+        <h1>Kanata config tester + simulator (1.6.0-prerelease-3)</h1>
+      </div>
+      <div>
+        <textarea
+          title="config"
+          id="config"
+          name="config"
+          class="monospace"
+          rows="5"
+          cols="50"
+        ></textarea>
+        <textarea
+          title="simulated input"
+          id="siminput"
+          name="siminput"
+          class="monospace"
+          rows="5"
+          cols="50"
+        ></textarea>
+      </div>
+      <div>
+        <button onclick="testConfig()">Test config</button>
+        <button onclick="simulateInput()">Simulate input</button>
+      </div>
+      <div>
+        <p id="result" class="multiline monospace"></p>
+      </div>
+    </div>
   </body>
 </html>
