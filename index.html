@@ -2,11 +2,15 @@
 
 <style>
 
-h1 {
+* {
   font-family: sans-serif;
 }
 
 body {
+  text-align: center;
+}
+
+h1, h2 {
   text-align: center;
 }
 
@@ -22,6 +26,13 @@ body > div {
 .multiline {
   white-space: pre;
 }
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
 </style>
 
 <script type="module" src="input.js"></script>
@@ -31,9 +42,11 @@ body > div {
   <body>
     <div>
       <div>
-        <h1>Kanata config tester + simulator (1.6.0-prerelease-3)</h1>
+        <h1>Kanata config tester + simulator</h1>
+        <h2>v1.6.0-prerelease-3</h2>
       </div>
       <div>
+        <label for="config">Configuration</label>
         <textarea
           title="config"
           id="config"
@@ -42,6 +55,7 @@ body > div {
           rows="5"
           cols="50"
         ></textarea>
+        <label for="siminput">Simulated input</label>
         <textarea
           title="simulated input"
           id="siminput"
@@ -51,7 +65,7 @@ body > div {
           cols="50"
         ></textarea>
       </div>
-      <div>
+      <div style="margin-top: 20px">
         <button onclick="testConfig()">Test config</button>
         <button onclick="simulateInput()">Simulate input</button>
       </div>
