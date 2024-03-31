@@ -4,4 +4,4 @@
 
 Content on the site:
 
-- [kanata](https://github.com/jtroo/kanata) config checker and I/O simulator.
+- [kanata](https://github.com/jtroo/kanata) configuration checker and I/O simulator.
