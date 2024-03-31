@@ -122,11 +122,7 @@ textarea:focus {
   #result {
     font-size: 14px;
     max-height: 200px;
-    width: 100%;
-  }
-
-  .result-container {
-    width: 550px;
+    min-width: 448px;
   }
 
   .modal {
