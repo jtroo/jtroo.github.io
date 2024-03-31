@@ -115,3 +115,60 @@ details {
     color: #fffff8;
   }
 }
+
+.button {
+  appearance: none;
+  background-color: #fff1fb;
+  border: 1px solid #1b1f23;
+  border-radius: 6px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  font-family: sans-serif;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.button:hover {
+  background-color: #ffe7f8;
+  transition-duration: 0.1s;
+}
+
+.button:active {
+  background-color: #f4eeff;
+  transition: none 0s;
+}
+
+.button:before {
+  display: none;
+}
+
+.button:-webkit-details-marker {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .button {
+    background-color: #40313c;
+    border: 1px solid #fefefe;
+  }
+
+  .button:hover {
+    background-color: #4d2643;
+    transition-duration: 0.1s;
+  }
+
+  .button:active {
+    background-color: #262543;
+    transition: none 0s;
+  }
+}
