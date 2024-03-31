@@ -8,6 +8,10 @@ h1, h2 {
   text-align: center;
 }
 
+h4 {
+  font-weight: normal;
+}
+
 body {
   padding: 10px;
   text-align: center;
