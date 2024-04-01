@@ -99,7 +99,7 @@ textarea:focus {
   }
   #actions-title {
     visibility: visible;
-    margin-bottom: 0px;
+    margin-bottom: 20px;
   }
 }
 
@@ -179,6 +179,7 @@ label {
   display: inline-block;
   font-family: sans-serif;
   font-weight: 500;
+  font-size: small;
   line-height: 20px;
   list-style: none;
   padding: 6px 16px;
@@ -218,6 +219,18 @@ label {
     transition: none 0s;
   }
 }
+a.button {
+  text-decoration: none;
+}
+
+.stopbutton {
+  color: #fff !important;
+  background-color: #eb1c90 !important;
+}
+.stopbutton:hover {
+  color: #fff !important;
+  background-color: #ff00b5 !important;
+}
 
 /* modal css */
 .modal {
@@ -244,11 +257,24 @@ label {
   background-color: #000;
 }
 
-.simheader {
+.textAreaHeader {
   display: flex;
   align-items: center;
 }
-#siminput-title {
+
+.textAreaHeader > label {
   margin-right: 20px;
   margin-bottom: 20px;
+}
+
+#showInputFormat {
+  margin-right: 20px;
+}
+
+#recordInputs {
+  display: block;
+}
+
+#stopRecording {
+  display: none;
 }

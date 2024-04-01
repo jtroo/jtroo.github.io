@@ -25,7 +25,13 @@
       <div class="box1">
         <div class="justify-left">
           <div>
-            <label for="config">Configuration</label>
+            <div class="textAreaHeader">
+              <label id="cfg-title" for="config">Configuration</label>
+              <a id="openKanataGuide"
+                 href="https://github.com/jtroo/kanata/blob/main/docs/config.adoc"
+                 target="_blank" rel="noopener noreferrer" class="button"
+              >Open kanata guide</a>
+            </div>
             <textarea
               title="config"
               id="config"
@@ -37,9 +43,15 @@
             ></textarea>
           </div>
           <div>
-            <div class="simheader">
+            <div class="textAreaHeader">
               <label id="siminput-title" for="siminput">Simulated input</label>
-              <button id="showInputFormat" class="button">Show input format</label>
+              <button id="showInputFormat" class="button">Show input format</button>
+              <button id="beginRecording" class="button"
+                onclick="beginRecording()"
+              >Record inputs</button>
+              <button id="stopRecording" class="button stopbutton"
+                onclick="stopRecording()"
+              >Stop recording</button>
             </div>
             <div>
               <dialog id="inputFormat" class="modal">
@@ -48,10 +60,15 @@
                   <button id="closeInputFormat" class="button">Close</label>
                 </div>
                 <p>
+                  You can use the recording functionality to automatically
+                  generate inputs. The recording will end on demand after
+                  running for 30s.
+                  <br/><br/>
                   The input format is <code>action:item</code>.
                   Valid actions are:
                   <table>
                     <tr><td><code>d | down</code></td> <td>: key down</td></tr>
+                    <tr><td><code>r | repeat</code></td> <td>: key repeat</td></tr>
                     <tr><td><code>u | up</code></td> <td>: key up</td></tr>
                     <tr><td><code>t | tick</code></td> <td>: advance time</td></tr>
                   </table>
