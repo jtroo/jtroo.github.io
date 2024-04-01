@@ -47,15 +47,19 @@ function beginRecording() {
       }
     }
     itemCount++;
+    var code = event.code;
+    if (!code) {
+      code = event.key;
+    }
     var action = 'd';
-    if (pressedKey === event.code) {
+    if (pressedKey === code) {
       // check for key repeat
       action = 'r';
     }
-    inputStr = inputStr.concat(`${action}:${event.code} `);
+    inputStr = inputStr.concat(`${action}:${code} `);
     prevT = Date.now();
     simInput.value = inputStr;
-    pressedKey = event.code;
+    pressedKey = code;
   };
   var recordFnRelease = (event) => {
     event.preventDefault();
@@ -68,7 +72,11 @@ function beginRecording() {
       }
     }
     itemCount++;
-    inputStr = inputStr.concat(`u:${event.code} `);
+    var code = event.code;
+    if (!code) {
+      code = event.key;
+    }
+    inputStr = inputStr.concat(`u:${code} `);
     prevT = Date.now();
     simInput.value = inputStr;
     pressedKey = null;
