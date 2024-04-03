@@ -18,6 +18,9 @@ function simulateInput() {
   var cfg = document.getElementById('config').value;
   var sim = document.getElementById('siminput').value;
   var out = simulate(cfg, sim)
+  out = out.replaceAll(/^t:/gm, 't:              ');
+  out = out.replaceAll('↓(press)   ', '   ↓(press) ');
+  out = out.replaceAll('↑(release) ', ' ↑(release) ');
   if (!out.trim()) {
     out = 'No output events from simulation.\nMake sure to simulate time via t:<number>';
   }
