@@ -112,6 +112,7 @@ function stopRecording(recordFnPress, recordFnRelease) {
     recordingPress = null;
     recordingRelease = null;
     recordingEndFn();
+    localStorage.setItem('siminput', simInput.value);
   }
 }
 
