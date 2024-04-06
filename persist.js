@@ -66,12 +66,16 @@ siminput.oninput = () => {
 }
 
 function permalink() {
+  var result = document.getElementById('result');
+  result.textContent = '.';
+  setTimeout(() => result.textContent = '..', 33);
+  setTimeout(() => result.textContent = '...', 66);
   var data = config.value + '||||||||||||||||' + siminput.value;
   var b64 = LZString.compressToEncodedURIComponent(data);
   var l = window.location;
   var url = `${l.origin}?data=${b64}`
   navigator.clipboard.writeText(url);
-  document.getElementById('result').textContent = `Copied link to clipboard!`;
+  setTimeout(() => result.textContent = '... Copied link to clipboard!', 100);
 }
 
 window.permalink = permalink;
