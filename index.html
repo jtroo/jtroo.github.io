@@ -40,12 +40,7 @@
               spellcheck="false"
               rows="6"
               cols="50"
-            >;; Hold f activates arrows for keys: i j k l
-(defsrc f i j k l)
-(defalias f (tap-hold 200 200 f
-  (layer-while-held arrows)))
-(deflayer base   @f   i    j    k    l)
-(deflayer arrows _    up   left down right)</textarea>
+            ></textarea>
           </div>
           <div>
             <div class="textAreaHeader">
@@ -97,11 +92,7 @@ d:b t:50 u:b t:50</code>
               spellcheck="false"
               rows="6"
               cols="50"
-            >d:KeyI t:50 u:KeyI t:100     d:KeyF t:10
-d:KeyI t:80 u:KeyI t:100
-d:KeyJ t:50 u:KeyJ t:300
-d:KeyK t:20 u:KeyK t:500
-d:KeyL t:60 u:KeyL t:480     u:KeyF t:9000</textarea>
+            ></textarea>
           </div>
         </div>
       </div>
@@ -113,6 +104,8 @@ d:KeyL t:60 u:KeyL t:480     u:KeyF t:9000</textarea>
             <button class="button" onclick="testConfig()">Test config</button>
             <button class="button" style="margin-left: 10px"
               onclick="simulateInput()">Simulate input</button>
+            <button class="button" style="margin-left: 10px"
+              onclick="permalink()">Copy permalink</button>
           </div>
         </div>
         <div class="center">
@@ -127,4 +120,5 @@ d:KeyL t:60 u:KeyL t:480     u:KeyF t:9000</textarea>
 </html>
 
 <script src="modal.js"></script>
-<script src="persist.js"></script>
+<script type="module" src="lzstring.min.js"></script>
+<script type="module" src="persist.js"></script>
