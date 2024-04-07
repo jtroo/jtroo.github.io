@@ -45,7 +45,7 @@
           <div>
             <div class="textAreaHeader">
               <label id="siminput-title" for="siminput">Input</label>
-              <button id="showInputFormat" class="button">Show input format</button>
+              <button id="showInputFormat" class="button">About input</button>
               <button id="beginRecording" class="button"
                 onclick="beginRecording()"
               >Record inputs</button>
@@ -81,6 +81,10 @@
                   Example:<br/><br/>
                   <code class="multiline">d:a t:50 u:a t:50
 d:b t:50 u:b t:50</code>
+                  <br/><br/>
+                  <b>NOTE:</b> The simulator behaves as if <code>process-unmapped-keys</code>
+                  is always set to <code>yes</code>. This cannot be turned off.
+                  This is unlike the real Kanata program where this configuration is off by default.
                 </p>
               </dialog>
             </div>
@@ -108,9 +112,9 @@ d:b t:50 u:b t:50</code>
               onclick="permalink()">Copy permalink</button>
           </div>
         </div>
-        <div class="center">
-          <div class="justify-left result-container">
-            <p id="result" class="monospace multiline"></p>
+        <div class="center full-height">
+          <div class="justify-left result-container full-height">
+            <p id="result" class="monospace multiline full-height"></p>
           </div>
         </div>
       </div>
