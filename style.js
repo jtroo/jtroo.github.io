@@ -3,8 +3,8 @@ let btnsEl = document.getElementById('actions-buttons');
 let resultEl = document.getElementById('result');
 
 function setBtnsWidth() {
-    btnsEl.style.minWidth = cfgEl.clientWidth + 'px';
-    resultEl.style.minWidth = cfgEl.clientWidth + 'px';
+    btnsEl.style.minWidth = cfgEl.offsetWidth + 'px';
+    resultEl.style.minWidth = cfgEl.offsetWidth + 'px';
 }
 
 setBtnsWidth();
