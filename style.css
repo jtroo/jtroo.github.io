@@ -45,7 +45,7 @@ code {
 
 #result {
   overflow-y: scroll;
-  min-height: 180px;
+  min-height: 178px;
 }
 
 textarea {
@@ -130,7 +130,7 @@ textarea:focus {
     max-width: 620px;
   }
   .box2 {
-    height: calc(100vh - 545px);
+    height: calc(98vh - 555px);
   }
 }
 
