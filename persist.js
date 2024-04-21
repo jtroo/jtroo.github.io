@@ -96,3 +96,11 @@ d:KeyJ t:50 u:KeyJ t:300
 d:KeyK t:20 u:KeyK t:500
 d:KeyL t:60 u:KeyL t:480     u:KeyF t:9000`;
 }
+
+// Adjust #config height to use more screen space
+config.style.height = 0;
+let h = config.scrollHeight;
+let bh = document.body.scrollHeight;
+if ((bh - h) < 500) h = bh - 500;
+config.style.height = h + 'px';
+console.log(h);
