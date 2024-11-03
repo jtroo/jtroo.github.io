@@ -1,22 +1,34 @@
 import initSync, { init, check_config, simulate } from './kanata_wasm.js';
 
-const beginBtn = document.getElementById('beginRecording');
-const stopBtn = document.getElementById('stopRecording');
-const simInput = document.getElementById('siminput');
+let beginBtn = document.getElementById('beginRecording');
+let stopBtn = document.getElementById('stopRecording');
+let simInput = document.getElementById('siminput');
+let cfgEl = document.getElementById('config');
+
+function shiftSpaceInsertsTab(el) {
+  el.addEventListener('keydown', function (e) {
+    if (e.keyCode === 32 && e.shiftKey) {
+      event.preventDefault();
+      document.execCommand('insertText', false, '\t');
+    }
+  }, false);
+}
+shiftSpaceInsertsTab(cfgEl);
+shiftSpaceInsertsTab(simInput);
 
 initSync();
 
 function testConfig() {
   init();
-  var cfg = document.getElementById('config').value;
+  var cfg = cfgEl.value;
   var out = check_config(cfg)
   document.getElementById('result').textContent = out;
 }
 
 function simulateInput() {
   init();
-  var cfg = document.getElementById('config').value;
-  var sim = document.getElementById('siminput').value;
+  var cfg = cfgEl.value;
+  var sim = simInput.value;
   var out = simulate(cfg, sim)
   out = out.replaceAll(/^t:/gm, 't:              ');
   out = out.replaceAll('↓(press)   ', '   ↓(press) ');

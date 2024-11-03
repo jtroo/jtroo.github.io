@@ -31,6 +31,7 @@
                  href="https://github.com/jtroo/kanata/blob/main/docs/config.adoc"
                  target="_blank" rel="noopener noreferrer" class="button"
               >Open kanata guide</a>
+              <button id="showConfigFormat" class="button">About config</button>
             </div>
             <textarea
               title="config"
@@ -52,6 +53,53 @@
               <button id="stopRecording" class="button stopbutton"
                 onclick="stopRecording()"
               >Stop recording</button>
+            </div>
+            <div>
+              <dialog id="configFormat" class="modal">
+                <div class="modal-header">
+                  <h3>Configuration format</h3>
+                  <button id="closeConfigFormat" class="button">Close</label>
+                </div>
+                <p>
+                You should put a valid kanata configuration
+                within the configuration text box.
+                You can see the <a id="openKanataGuide"
+                   href="https://github.com/jtroo/kanata/blob/main/docs/config.adoc"
+                   target="_blank" rel="noopener noreferrer"
+                >kanata guide</a>
+                to learn about the configuration syntax.
+                </p>
+                <p>
+                To insert a Tab (<code>'\t'</code>) character
+                in the configuration text box, you can press Shift+Space.
+                </p>
+                <p>
+                Some kanata configurations make use of files when using the
+                real program.
+                For example, in <code>(include file.txt...)</code>
+                or for <code>(defzippy-experimental zippycfg.txt ...)</code>.
+                You can simulate files in the simulator.
+                Start a line with:<br/><br/>
+                <code>=== file:...</code><br/><br/>
+                The text composing <code>...</code> will be the filename.
+                All text after the line &mdash; up until the end of the configuration
+                or the next file definition &mdash;
+                will be the content of the simulated file.
+                </p>
+                <p>
+                Example:<br/><br/>
+                  <code class="multiline">(defsrc)
+(deflayermap (base) d @d)
+(include config-d.txt)
+(defzippy-experimental zippycfg.txt)
+
+=== file:config-d.txt
+(defalias d (tap-hold 200 200 d lsft))
+
+=== file:zippycfg.txt
+abc	alphabet</code>
+                </p>
+              </dialog>
             </div>
             <div>
               <dialog id="inputFormat" class="modal">
