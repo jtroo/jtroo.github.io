@@ -432,6 +432,129 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer{background:none}
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+
+/* DARK MODE */
+
+@media (prefers-color-scheme: dark) {
+body,
+body .btn,
+body table,
+body th {
+	background-color: #222; !important
+	color: #e0e0e0; !important
+}
+
+body .btn {
+	box-shadow: 0 0 5px #616161; !important
+	border: 1px solid #222; !important
+}
+
+body .btn:focus {
+	box-shadow: 0 0 5px #9e9e9e; !important
+}
+
+body .theme-switcher {
+	background: url("../img/sun.svg") no-repeat center; !important
+}
+
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{
+color:#ff8a80;!important
+}
+.quoteblock blockquote::before{
+color:#ff8a80;!important
+}
+
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6,
+body #toctitle,
+body .sidebarblock .title,
+body .imageblock .title {
+	color: #ff8a80 !important;
+}
+
+body blockquote::before {
+	color: #d32f2f !important;
+}
+
+body code,
+body pre {
+	background-color: #2f2f2f !important;
+	color: #e0e0e0; !important
+}
+
+body .sectlevel1 li a {
+	color: #ff8a80 !important;
+}
+
+body a,
+body a code,
+body .sectlevel2 li a {
+	color: #90caf9 !important;
+}
+
+body a:hover,
+body a:hover code,
+body a code:hover,
+body .sectlevel2 li a:hover {
+	color: #42a5f5 !important;
+}
+
+body #toc,
+body .pwa-install-div {
+	background-color: #222 !important;
+}
+
+body #toc {
+	border-left-color: #212121; !important
+	border-right-color: #212121; !important
+}
+
+body .pwa-install-div {
+	box-shadow: 0 0 5px #2f2f2f; !important
+}
+
+body #pwa-install-btn {
+	box-shadow: 0 0 5px #2f2f2f; !important
+	background-color: #e0e0e0; !important
+	border: 1px solid #e0e0e0; !important
+	color: #222; !important
+}
+
+body li,
+body p,
+body .details,
+body details,
+body details summary,
+body td,
+body blockquote,
+body .attribution cite {
+	color: #e0e0e0 !important;
+}
+
+body .sidebarblock {
+	background-color: #222 !important;
+}
+
+* {
+	scrollbar-color: #818181 #333; !important
+}
+*::-webkit-scrollbar-track:hover {
+	scrollbar-color: #a1a181 #333; !important
+}
+
+
+/* code style */
+:not(pre):not([class^=L])>code{background:#2f2f2f;!important}
+kbd{background:#2f2f2f;!important}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#2f2f2f;!important}
+.literalblock.output pre{color:#2f2f2f;!important}
+.prettyprint{background:#2f2f2f;!important}
+}
+
 </style>
 </head>
 <body class="article toc2 toc-left">
