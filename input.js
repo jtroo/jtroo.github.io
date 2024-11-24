@@ -56,7 +56,7 @@ function beginRecording() {
     if (prevT != null) {
       inputStr = inputStr.concat(`t:${Date.now() - prevT} `);
       itemCount++;
-      if (itemCount >= 6) {
+      if (itemCount >= 4) {
         inputStr = inputStr.concat('\n');
         itemCount = 0;
       }
@@ -81,7 +81,7 @@ function beginRecording() {
     if (prevT != null) {
       inputStr = inputStr.concat(`t:${Date.now() - prevT} `);
       itemCount++;
-      if (itemCount >= 6) {
+      if (itemCount >= 4) {
         inputStr = inputStr.concat('\n');
         itemCount = 0;
       }
