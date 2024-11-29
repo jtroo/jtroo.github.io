@@ -1418,14 +1418,13 @@ Some examples:</p>
 <p>This option is disabled by default.
 The reason this is not enabled by default
 is because some keys may not work correctly if they are intercepted.
-For example, see <a href="#windows-only-windows-altgr">Windows only: windows-altgr</a>.</p>
+A known issue being AltGr/ralt/Right Alt; see <a href="#windows-only-windows-altgr">Windows only: windows-altgr</a>.</p>
 </div>
 <div class="listingblock">
 <div class="title">Example:</div>
 <div class="content">
-<pre class="highlight"><code>(defcfg
-  process-unmapped-keys yes
-)</code></pre>
+<pre class="highlight"><code>(defcfg process-unmapped-keys yes)
+(defcfg process-unmapped-keys (all-except lctl ralt))</code></pre>
 </div>
 </div>
 </div>
@@ -3764,8 +3763,22 @@ not. This is not possible with <code>multi</code>.</p>
 <div class="paragraph">
 <p>The <code>macro</code> action accepts one or more keys, some actions, chords, and delays
 (unit: ms).  It also accepts a list prefixed with <a href="#output-chordscombos">output chord</a>
-modifiers where the list is subject to the aforementioned restrictions. The
-number keys will be parsed as delays, so they must be aliased to be used in a macro.</p>
+modifiers where the list is subject to the aforementioned restrictions.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+The number keys <code>0-9</code> will be parsed as millisecond delays
+whereas in other contexts they would be parsed as key names.
+To use the numbered keys they must be aliased
+or otherwise use the key names <code>Digit0-Digit9</code>.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Up to 4 macros can be active at the same time.</p>
@@ -5598,21 +5611,26 @@ this only functions correctly if you also set
 <li>
 <p>the release of the tapped key in a tap-hold activation</p>
 </li>
+<li>
+<p>a non-eager tap-dance activation from interruption by another key</p>
+</li>
+<li>
+<p>input chord activations, both v1 and v2</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
-<p>These events are delayed the defined number of milliseconds (approximate).
+<p>Key event processing is paused the defined number of milliseconds (approximate).
 The default value is 5.</p>
 </div>
 <div class="paragraph">
-<p>While the release is delayed, further processing of inputs is also paused.
-This means that there will be a minor input latency impact in the mentioned scenarios.
-Since 5ms is 1 frame for a 200 Hz refresh rate,
+<p>There will be a minor input latency impact in the mentioned scenarios.
+Since 5ms is 1 frame at 200 Hz refresh rate,
 in most scenarios this will not be perceptible.</p>
 </div>
 <div class="paragraph">
 <p>The reason for this configuration existing is that some environments
-do not process the scenarios correctly due to the rapidity of the release.
+do not process the scenarios correctly due to the rapidity of key events.
 Kanata does send the events in the correct order,
 so the fault is more in the environment,
 but kanata provides a workaround anyway.</p>
@@ -5620,7 +5638,7 @@ but kanata provides a workaround anyway.</p>
 <div class="paragraph">
 <p>If you are negatively impacted by the latency increase of these events
 and your environment is not impacted by increased rapidity,
-you can set reduce the value to a number 0 to 4.</p>
+you can reduce the value to a number between 0 and 4.</p>
 </div>
 <div class="listingblock">
 <div class="title">Example:</div>
@@ -6099,7 +6117,8 @@ You can use one of the listed values to change what kanata does with the key:</p
 </div>
 <div class="paragraph">
 <p>Without these workarounds,
-you should instead ensure you set <code>process-unmapped-keys no</code>
+you should use <code>process-unmapped-keys (all-except lctl ralt))</code>,
+or use <code>process-unmapped-keys no</code>
 <strong>and</strong> also omit both <code>ralt</code> and <code>lctl</code> from <code>defsrc</code>.</p>
 </div>
 <div class="listingblock">
@@ -7675,6 +7694,10 @@ the true underlying command as you type.</p>
 </div>
 </div>
 </div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
 </div>
 </div>
 </body>
