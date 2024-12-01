@@ -6,11 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
 <title>Kanata Configuration Guide</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
-/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
-/* Uncomment the following line when using as a custom stylesheet */
-/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
 html{font-family:sans-serif;-webkit-text-size-adjust:100%}
 a{background:none}
 a:focus{outline:thin dotted}
@@ -4387,10 +4383,10 @@ if any of the items evaluates to true.</p>
 <pre class="highlight"><code>(or  $item1 $item2 ... $itemN)
 (and $item1 $item2 ... $itemN)
 (not $item1 $item2 ... $itemN)
-(key-history $key-name $recency)
-(key-timing  $recency $comparator $time)
+(key-history $key-name $key-recency)
+(key-timing  $key-recency $comparator $time)
 (input         $input-type $key-name)
-(input-history $input-type $key-name $recency)
+(input-history $input-type $key-name $input-recency)
 (layer      $layer-name)
 (base-layer $layer-name)</code></pre>
 </div>
@@ -4415,17 +4411,17 @@ if any of the items evaluates to true.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>key-history</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the key in the <code>$recency</code> slot matches <code>$key-name</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the key in the recency slot matches <code>$key-name</code>.
+A <code>$key-recency</code> of 1 is the most recent key pressed according to Kanata processing.
+The max recency is 8.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>key-timing</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The valid values for <code>$comparator</code> are <code>less-than</code> and <code>greater-than</code>,
 with <code>lt</code> and <code>gt</code> as shorthand if desired.
-This item evaluates to true if the key with the corresponding <code>$recency</code>
+This item evaluates to true if the key with the corresponding recency
 was pressed — for <code>lt</code> more recently than, or for <code>gt</code> later than —
-the defined <code>$time</code> with unit milliseconds.
-A <code>$recency</code> of 1 is the most recent key pressed according to Kanata processing.
-The max recency is 8.</p></td>
+the defined <code>$time</code> with unit milliseconds.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>input</code></p></td>
@@ -4436,9 +4432,9 @@ If using <code>virtual</code>, this will check against virtual key activations.<
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>input-history</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the input in the <code>$recency</code> slot matches <code>$key-name</code>.
+<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the input in the <code>$input-recency</code> slot matches <code>$key-name</code>.
 Two input types use the same history with respect to recency slots.
-A <code>$recency</code> of 1 is the most recent input i.e. the input activating <code>switch</code> itself.
+A recency of 1 is the most recent input i.e. the input activating <code>switch</code> itself.
 The max recency is 8.</p></td>
 </tr>
 <tr>
@@ -4747,7 +4743,7 @@ when compared to key-history is that, at the time of switch activation,
 the history of <code>input-history</code> for recency <code>1</code> will be the just-pressed input.
 In other words recency <code>1</code> is the input activating the <code>switch</code> action itself.
 Whereas with <code>key-history</code> for example, the key that will be next outputted
-may determined by the switch logic itself, so is not in the history.
+may be determined by the switch logic itself, so is not in the history.
 The consequence of this is that you should use a recency of <code>2</code>
 when referring to the previously pressed input
 because the current input is in the recency <code>1</code> slot.</p>
