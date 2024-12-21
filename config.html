@@ -6,11 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
 <title>Kanata Configuration Guide</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
-/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
-/* Uncomment the following line when using as a custom stylesheet */
-/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
 html{font-family:sans-serif;-webkit-text-size-adjust:100%}
 a{background:none}
 a:focus{outline:thin dotted}
@@ -3406,8 +3402,10 @@ Activates <code>$tap-action</code> early if a key within <code>$tap-keys</code> 
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>$tap-hold-except-keys</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The <code>$tap-keys</code> parameter is a list of key names.
-Activates <code>$tap-action</code> early if a key within <code>$tap-keys</code> is pressed before hold activates.
-No key is ever output unless the key is released or another key is pressed,
+Activates $tap-action if a key within $tap-keys is pressed
+or if the action key is released before hold timeout.
+No key is ever output until the action key is released
+or another key is pressed,
 which differs from the default <code>tap-hold</code> behaviour.</p></td>
 </tr>
 </tbody>
@@ -4183,7 +4181,7 @@ otherwise <code>caps-word</code> will be activate as normal.</p>
 <p><strong>Reference</strong></p>
 </div>
 <div class="paragraph">
-<p>The <code>unmod</code> action will dactivate modifier keys while outputting
+<p>The <code>unmod</code> action will deactivate modifier keys while outputting
 one or more defined keys.</p>
 </div>
 <div class="listingblock">
@@ -4255,7 +4253,7 @@ states to be tracked correctly.
 </div>
 </div>
 <div class="paragraph">
-<p>An list may optionally be used as the first parameter of <code>unmod</code>.
+<p>A list may optionally be used as the first parameter of <code>unmod</code>.
 The list must be non-empty and must contain only modifier keys,
 which are the keys in the affected modifiers list from earlier in this document section.</p>
 </div>
@@ -4279,8 +4277,10 @@ rather than all modifiers.</p>
 <p><strong>Reference</strong></p>
 </div>
 <div class="paragraph">
-<p>The fork action allows choosing between a default and an alternate action
-based on whether specific keys are active.</p>
+<p>The <code>fork</code> action allows choosing between a default and an alternate action
+based on whether specific keys are active. <code>fork</code> is the equivalent of the
+basic key checks in <code>switch</code>, using none of the list logic items, i.e. virtual
+keys are not supported.</p>
 </div>
 <div class="listingblock">
 <div class="title">Syntax:</div>
@@ -4387,10 +4387,10 @@ if any of the items evaluates to true.</p>
 <pre class="highlight"><code>(or  $item1 $item2 ... $itemN)
 (and $item1 $item2 ... $itemN)
 (not $item1 $item2 ... $itemN)
-(key-history $key-name $recency)
-(key-timing  $recency $comparator $time)
+(key-history $key-name $key-recency)
+(key-timing  $key-recency $comparator $time)
 (input         $input-type $key-name)
-(input-history $input-type $key-name $recency)
+(input-history $input-type $key-name $input-recency)
 (layer      $layer-name)
 (base-layer $layer-name)</code></pre>
 </div>
@@ -4415,17 +4415,17 @@ if any of the items evaluates to true.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>key-history</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the key in the <code>$recency</code> slot matches <code>$key-name</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the key in the recency slot matches <code>$key-name</code>.
+A <code>$key-recency</code> of 1 is the most recent key pressed according to Kanata processing.
+The max recency is 8.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>key-timing</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The valid values for <code>$comparator</code> are <code>less-than</code> and <code>greater-than</code>,
 with <code>lt</code> and <code>gt</code> as shorthand if desired.
-This item evaluates to true if the key with the corresponding <code>$recency</code>
+This item evaluates to true if the key with the corresponding recency
 was pressed — for <code>lt</code> more recently than, or for <code>gt</code> later than —
-the defined <code>$time</code> with unit milliseconds.
-A <code>$recency</code> of 1 is the most recent key pressed according to Kanata processing.
-The max recency is 8.</p></td>
+the defined <code>$time</code> with unit milliseconds.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>input</code></p></td>
@@ -4436,9 +4436,9 @@ If using <code>virtual</code>, this will check against virtual key activations.<
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>input-history</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the input in the <code>$recency</code> slot matches <code>$key-name</code>.
+<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the input in the <code>$input-recency</code> slot matches <code>$key-name</code>.
 Two input types use the same history with respect to recency slots.
-A <code>$recency</code> of 1 is the most recent input i.e. the input activating <code>switch</code> itself.
+A recency of 1 is the most recent input i.e. the input activating <code>switch</code> itself.
 The max recency is 8.</p></td>
 </tr>
 <tr>
@@ -4747,7 +4747,7 @@ when compared to key-history is that, at the time of switch activation,
 the history of <code>input-history</code> for recency <code>1</code> will be the just-pressed input.
 In other words recency <code>1</code> is the input activating the <code>switch</code> action itself.
 Whereas with <code>key-history</code> for example, the key that will be next outputted
-may determined by the switch logic itself, so is not in the history.
+may be determined by the switch logic itself, so is not in the history.
 The consequence of this is that you should use a recency of <code>2</code>
 when referring to the previously pressed input
 because the current input is in the recency <code>1</code> slot.</p>
@@ -7462,7 +7462,7 @@ The options are <code>none</code>, <code>add-space-only</code>, and <code>full</
 With <code>none</code>, outputs are typed as-is.
 With <code>add-space-only</code>, spaces are automatically added after outputs
 which end with neither a space or a backspace ⌫.
-With <code>full</code>, the <code>add-space-only</code> behaviour applios
+With <code>full</code>, the <code>add-space-only</code> behaviour applies
 alongside additional behaviour:
 typing punctuation (default characters: <code>, . ;</code>)
 after a zippy activation will delete a prior automatically-added space.</p></td>
@@ -7488,7 +7488,22 @@ in the output column of the zippy configuration file.</p></td>
 when seen in the zippy file output column.
 Must be a single key or output chord.
 The output chord may contain <code>AG-</code> to tell kanata to press with AltGr
-and may contain <code>S-</code> to tell kanata to press with Shift.</p></td>
+and may contain <code>S-</code> to tell kanata to press with Shift.</p>
+<p class="tableblock">The list items <code>no-erase</code> and <code>single-output</code> are also usable in this position.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>no-erase</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accepts a single key or output chord as a parameter.
+The zippy system will not backspace this character
+in case of auto-erasure by a superset chord or followup chord.
+Use for dead keys or compose keys.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>single-output</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accepts one or more keys or output chords as a parameter.
+The zippy system send only one backspace
+in case of auto-erasure by a superset chord or followup chord.
+Use for a dead key or compose key sequence with one output symbol.</p></td>
 </tr>
 </tbody>
 </table>
@@ -7565,7 +7580,7 @@ by a single Tab character.
 The characters are typed in sequence
 and must all be singular-name key names
 as one would configure in <code>defsrc</code>.
-As an exception, capitalized single-character key names
+A capitalized single-character key name
 will be parsed successfully
 and these will be outputted alongside Shift to output the capitalized key.
 Additionally, <code>output-character-mappings</code> configuration can be used
@@ -7598,6 +7613,8 @@ to inform kanata of additional mappings that may use Shift or AltGr.</p></td>
     | S-\
     _ S--
     ® AG-r
+    ’ (no-erase `)
+    é (single-output ' e)
   )
 )</code></pre>
 </div>
