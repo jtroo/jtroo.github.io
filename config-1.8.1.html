@@ -639,7 +639,6 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#override-release-on-activation">override-release-on-activation</a></li>
 <li><a href="#allow-hardware-repeat">allow-hardware-repeat</a></li>
 <li><a href="#alias-to-trigger-on-load">alias-to-trigger-on-load</a></li>
-<li><a href="#mouse-movement-key">Linux or Windows-interception only: mouse-movement-key</a></li>
 <li><a href="#linux-only-linux-dev">Linux only: linux-dev</a></li>
 <li><a href="#linux-only-linux-dev-names-include">Linux only: linux-dev-names-include</a></li>
 <li><a href="#linux-only-linux-dev-names-exclude">Linux only: linux-dev-names-exclude</a></li>
@@ -649,7 +648,6 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#linux-only-linux-unicode-termination">Linux only: linux-unicode-termination</a></li>
 <li><a href="#_linux_only_linux_x11_repeat_delay_rate">Linux only: linux-x11-repeat-delay-rate</a></li>
 <li><a href="#linux-only-linux-use-trackpoint-property">Linux only: linux-use-trackpoint-property</a></li>
-<li><a href="#linux-only-linux-output-device-name">Linux only: linux-output-device-name</a></li>
 <li><a href="#linux-only-linux-output-device-bus-type">Linux only: linux-output-device-bus-type</a></li>
 <li><a href="#macos-only-macos-dev-names-include">macOS only: macos-dev-names-include</a></li>
 <li><a href="#macos-only-macos-dev-names-exclude">macOS only: macos-dev-names-exclude</a></li>
@@ -715,12 +713,6 @@ See below for links to specific guide versions.</p>
 </div>
 <div class="ulist">
 <ul>
-<li>
-<p><a href="/config-1.9.0.html">v1.9.0</a></p>
-</li>
-<li>
-<p><a href="/config-1.8.1.html">v1.8.1</a></p>
-</li>
 <li>
 <p><a href="/config-1.8.0.html">v1.8.0</a></p>
 </li>
@@ -1632,9 +1624,9 @@ Some notable exceptions are:</p>
 <div class="title">Example:</div>
 <div class="content">
 <pre class="highlight"><code>(defvar
-  tap-repress-timeout   100
+  tap-timeout   100
   hold-timeout  200
-  tt $tap-repress-timeout
+  tt $tap-timeout
   ht $hold-timeout
 )
 
@@ -3362,7 +3354,7 @@ depending it a key is tapped or held.</p>
 <div class="listingblock">
 <div class="title">Syntax:</div>
 <div class="content">
-<pre class="highlight"><code>(tap-hold $tap-repress-timeout $hold-timeout $tap-action $hold-action)</code></pre>
+<pre class="highlight"><code>(tap-hold $tap-timeout $hold-timeout $tap-action $hold-action)</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -3372,7 +3364,7 @@ depending it a key is tapped or held.</p>
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$tap-repress-timeout</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$tap-timeout</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Number of milliseconds for the window that a tap into re-press with hold
 results in the <code>$tap-action</code> being held.</p></td>
 </tr>
@@ -3395,12 +3387,12 @@ results in <code>$tap-action</code> activating.</p></td>
 <div class="listingblock">
 <div class="title">Variants:</div>
 <div class="content">
-<pre>(tap-hold-press $tap-repress-timeout $hold-timeout $tap-action $hold-action)
-(tap-hold-release $tap-repress-timeout $hold-timeout $tap-action $hold-action)
-(tap-hold-press-timeout $tap-repress-timeout $hold-timeout $tap-action $hold-action $timeout-action)
-(tap-hold-release-timeout $tap-repress-timeout $hold-timeout $tap-action $hold-action $timeout-action)
-(tap-hold-release-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys)
-(tap-hold-except-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys)</pre>
+<pre>(tap-hold-press $tap-timeout $hold-timeout $tap-action $hold-action)
+(tap-hold-release $tap-timeout $hold-timeout $tap-action $hold-action)
+(tap-hold-press-timeout $tap-timeout $hold-timeout $tap-action $hold-action $timeout-action)
+(tap-hold-release-timeout $tap-timeout $hold-timeout $tap-action $hold-action $timeout-action)
+(tap-hold-release-keys $tap-timeout $hold-timeout $tap-action $hold-action $tap-keys)
+(tap-hold-except-keys $tap-timeout $hold-timeout $tap-action $hold-action $tap-keys)</pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -3458,7 +3450,7 @@ key whereas a hold is a long press.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>tap repress timeout (unit: ms)</p>
+<p>tap timeout (unit: ms)</p>
 </li>
 <li>
 <p>hold timeout (unit: ms)</p>
@@ -3472,19 +3464,19 @@ key whereas a hold is a long press.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>The tap repress timeout is the number of milliseconds within which a rapid
+<p>The tap timeout is the number of milliseconds within which a rapid
 press+release+press of a key will result in the tap action being held instead
 of the hold action activating.</p>
 </div>
 <details>
-<summary class="title">Tap repress timeout in more detail</summary>
+<summary class="title">Tap timeout in more detail</summary>
 <div class="content">
 <div class="paragraph">
-<p>The way a <code>tap-hold</code> action works with respect to the tap repress timeout
+<p>The way a <code>tap-hold</code> action works with respect to the tap timeout
 is often unclear to newcomers.
 To make it concrete, the output event sequence of the <code>tap-hold</code> action
-<code>(tap-hold $tap-repress-timeout 200 a lctl)</code>
-for varying values of <code>$tap-repress-timeout</code>
+<code>(tap-hold $tap-timeout 200 a lctl)</code>
+for varying values of <code>$tap-timeout</code>
 with a fixed input event sequence will be described.</p>
 </div>
 <div class="paragraph">
@@ -3516,7 +3508,7 @@ with a fixed input event sequence will be described.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>With <code>(defvar $tap-repress-timeout 0)</code>, the output event sequence is:</p>
+<p>With <code>(defvar $tap-timeout 0)</code>, the output event sequence is:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -3544,11 +3536,11 @@ with a fixed input event sequence will be described.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>The above output sequence is the same for all <code>$tap-repress-timeout</code> values
+<p>The above output sequence is the same for all <code>$tap-timeout</code> values
 between and including <code>0</code> and <code>99</code>.</p>
 </div>
 <div class="paragraph">
-<p>For a value of <code>100</code> or greater for <code>$tap-repress-timeout</code>,
+<p>For a value of <code>100</code> or greater for <code>$tap-timeout</code>,
 the output event sequence is instead:</p>
 </div>
 <div class="ulist">
@@ -5941,72 +5933,6 @@ the swapped "i" and "o" keys.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="mouse-movement-key">Linux or Windows-interception only: mouse-movement-key</h3>
-<div class="paragraph">
-<p>Accepts a single key name.
-When configured, whenever a mouse cursor movement is received,
-the configured key name will be "tapped" by Kanata,
-activating the key&#8217;s action.</p>
-</div>
-<div class="paragraph">
-<p>This enables reporting of every relative mouse movement, which
-corresponds to standard mice, trackballs, trackpads and
-trackpoints. Absolute movements, which can be generated by
-touchscreens, drawing tablets and some mouse replacement or
-accessibility software, are ignored. Scrolling events and mouse
-buttons are also ignored.</p>
-</div>
-<div class="paragraph">
-<p>The intended use of these events is to provide a way to automatically
-enable a mouse keys layer while mousing, which can be disabled by a
-timeout or typing on other keys, rather than explicit toggling. see
-cfg_examples/automousekeys-*.kbd for more.</p>
-</div>
-<div class="paragraph">
-<p>The <code>mvmt</code> key name is specially intended for this purpose.  It has no
-output key mapping and cannot be supplied as an action; however, any
-key may be used.</p>
-</div>
-<div class="paragraph">
-<p>Supports live reload on Linux, but with Windows-interception, this
-option must be present on startup to enable mouse movement event
-collection, so restart is required to enable it. Changing the key name
-is always supported, however.</p>
-</div>
-<div class="listingblock">
-<div class="title">Example:</div>
-<div class="content">
-<pre class="highlight"><code>(defcfg
-  process-unmapped-keys yes
-  mouse-movement-key mvmt
-)
-
-(defsrc
-  k     l     ;
-  mvmt
-)
-
-(defvirtualkeys
-  mouse (layer-while-held mouse-layer)
-)
-
-(defalias
-  mhld (hold-for-duration 750 mouse)
-)
-
-(deflayer qwerty
-  k     l     ;
-  @mhld
-)
-
-(deflayer mouse-layer
-  mlft  mmid  mrgt
-  @mhld
-)</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
 <h3 id="linux-only-linux-dev">Linux only: linux-dev</h3>
 <div class="paragraph">
 <p>By default, kanata will try to detect which input devices are keyboards and try
@@ -6287,21 +6213,6 @@ changing their behavior as well.</p>
 <div class="content">
 <pre class="highlight"><code>(defcfg
   linux-use-trackpoint-property yes
-)</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="linux-only-linux-output-device-name">Linux only: linux-output-device-name</h3>
-<div class="paragraph">
-<p>This option defines the name of the evdev output device.
-The default value is kanata.</p>
-</div>
-<div class="listingblock">
-<div class="title">Example:</div>
-<div class="content">
-<pre class="highlight"><code>(defcfg
-   linux-output-device-name "kanata output"
 )</code></pre>
 </div>
 </div>
