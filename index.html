@@ -27,8 +27,8 @@
           <div>
             <div class="textAreaHeader">
               <label id="cfg-title" for="config">Configuration</label>
-              <button id="showConfigFormat" class="button">About config</button>
-              <a id="openKanataGuide"
+              <button id="showConfigFormat" class="button" title="Display a popup explaining the Configuration text box">About config</button>
+              <a id="openKanataGuide" title="Link to the configuration guide"
                  href="/config.html"
                  target="_blank" rel="noopener noreferrer" class="button"
               >Kanata guide</a>
@@ -45,11 +45,11 @@
           <div>
             <div class="textAreaHeader">
               <label id="siminput-title" for="siminput">Input</label>
-              <button id="showInputFormat" class="button">About input</button>
-              <button id="beginRecording" class="button"
+              <button id="showInputFormat" class="button" title="Display a popup explaining the Input text box">About input</button>
+              <button id="beginRecording" class="button" title="Begin recording your key inputs the Input text box, replacing the existing content"
                 onclick="beginRecording()"
               >Record inputs</button>
-              <button id="stopRecording" class="button stopbutton"
+              <button id="stopRecording" class="button stopbutton" title="Stop recording into the Input text box"
                 onclick="stopRecording()"
               >Stop recording</button>
             </div>
@@ -57,12 +57,12 @@
               <dialog id="configFormat" class="modal">
                 <div class="modal-header">
                   <h3>Configuration format</h3>
-                  <button id="closeConfigFormat" class="button">Close</label>
+                  <button id="closeConfigFormat" class="button" title="Close this popup">Close</label>
                 </div>
                 <p>
                 You should put a valid kanata configuration
                 within the configuration text box.
-                You can see the <a id="openKanataGuideDialog"
+                You can see the <a id="openKanataGuideDialog" title=""
                    href="/config.html"
                    target="_blank" rel="noopener noreferrer"
                 >kanata guide</a>
@@ -104,7 +104,7 @@ abc	alphabet</code>
               <dialog id="inputFormat" class="modal">
                 <div class="modal-header">
                   <h3>Simulated input format</h3>
-                  <button id="closeInputFormat" class="button">Close</label>
+                  <button id="closeInputFormat" class="button" title="Close this popup">Close</label>
                 </div>
                 <p>
                   You can use the recording functionality to automatically
@@ -151,12 +151,12 @@ d:b t:50 u:b t:50</code>
         <div class="justify-left box2-inner">
           <h4 id="actions-title">Actions</h4>
           <div id="actions-buttons" style="margin-top: 10px">
-            <button class="button" onclick="testConfig()">Test config</button>
-            <button class="button" style="margin-left: 10px"
-              onclick="simulateInput()">Simulate input</button>
-            <button class="button" style="margin-left: 10px"
+            <button class="button" onclick="testConfig()" title="Test if the configuration is valid">Check</button>
+            <button class="button" style="margin-left: 10px" title="Simulate inputs then display outputs"
+              onclick="simulateInput()">Simulate</button>
+            <button class="button" style="margin-left: 10px" title="Save a link to your clipboard for the current configuration and input"
               onclick="permalink()">Copy permalink</button>
-            <button class="button" style="margin-left: 10px"
+            <button class="button" style="margin-left: 10px" title="Save a link and all fields to your clipboard in markdown format"
               onclick="permalinkConfigInputOutput()">Copy all</button>
           </div>
         </div>

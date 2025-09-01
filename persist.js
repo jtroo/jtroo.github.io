@@ -94,6 +94,7 @@ function permalinkConfigInputOutput() {
   var simInputText = siminput.value;
   window.simulateInput();
   var outputText = document.getElementById('result').textContent;
+  var c = '```';
   updateClipboardAndSignalToUser(`Link to simulator
 -----------------
 
@@ -102,17 +103,24 @@ function permalinkConfigInputOutput() {
 Simulator config
 ----------------
 
+${c}
 ${configText}
+${c}
 
 Simulator input
 ---------------
 
+${c}
 ${simInputText}
+${c}
+
 
 Simulator output
 ----------------
 
+${c}
 ${outputText}
+${c}
 `, 'all')
 }
 window.permalinkConfigInputOutput = permalinkConfigInputOutput;
