@@ -65,20 +65,57 @@ siminput.oninput = () => {
   }
 }
 
-function permalink() {
+function updateClipboardAndSignalToUser(clipContent, contentLabel) {
+  navigator.clipboard.writeText(clipContent);
   var result = document.getElementById('result');
   result.textContent = '.';
   setTimeout(() => result.textContent = '..', 33);
   setTimeout(() => result.textContent = '...', 66);
+  setTimeout(() => result.textContent = `... Copied ${contentLabel} to clipboard!`, 100);
+}
+
+function genpermalink() {
   var data = config.value + '||||||||||||||||' + siminput.value;
   var b64 = LZString.compressToEncodedURIComponent(data);
   var l = window.location;
-  var url = `${l.origin}?data=${b64}`
-  navigator.clipboard.writeText(url);
-  setTimeout(() => result.textContent = '... Copied link to clipboard!', 100);
+  return `${l.origin}?data=${b64}`;
+}
+
+function permalink() {
+  var u = genpermalink()
+  updateClipboardAndSignalToUser(u, 'link')
 }
 
 window.permalink = permalink;
+
+function permalinkConfigInputOutput() {
+  var linkText = genpermalink();
+  var configText = config.value;
+  var simInputText = siminput.value;
+  window.simulateInput();
+  var outputText = document.getElementById('result').textContent;
+  updateClipboardAndSignalToUser(`Link to simulator
+-----------------
+
+[Permalink](${linkText})
+
+Simulator config
+----------------
+
+${configText}
+
+Simulator input
+---------------
+
+${simInputText}
+
+Simulator output
+----------------
+
+${outputText}
+`, 'all')
+}
+window.permalinkConfigInputOutput = permalinkConfigInputOutput;
 
 if (!config.value) {
   config.value = `;; Hold f activates arrows for keys: i j k l
