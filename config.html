@@ -672,6 +672,22 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#using-multiple-defcfg-options">Using multiple defcfg options</a></li>
 </ul>
 </li>
+<li><a href="#_command_line_arguments">Command line arguments</a>
+<ul class="sectlevel2">
+<li><a href="#args-help">Show help text: <code>-h</code>, <code>--help</code></a></li>
+<li><a href="#args-config-file">Configuration file(s): <code>-c</code>, <code>--cfg</code></a></li>
+<li><a href="#args-tcp">TCP server address: <code>-p</code>, <code>--port</code></a></li>
+<li><a href="#args-quiet">Disable logs other than errors: <code>-q</code>, <code>--quiet</code></a></li>
+<li><a href="#args-debug">Enable debug logs: <code>-d</code>, <code>--debug</code></a></li>
+<li><a href="#args-trace">Enable trace logs: <code>-t</code>, <code>--trace</code></a></li>
+<li><a href="#args-nodelay">Remove startup delay: <code>-n</code>, <code>--nodelay</code></a></li>
+<li><a href="#args-check">Only check configuration: <code>--check</code></a></li>
+<li><a href="#args-log-layer-changes">Force log changes: <code>--log-layer-changes</code></a></li>
+<li><a href="#args-linux-dev-symlink">Linux only - Device symlink path: <code>-s</code>, <code>--symlink-path</code></a></li>
+<li><a href="#args-wait-device">Linux only - Wait before device grab attempt: <code>-w</code>, <code>--wait-device-ms</code></a></li>
+<li><a href="#args-macos-list-devices">macOS only - Only list keyboards: <code>-l</code>, <code>--list</code></a></li>
+</ul>
+</li>
 <li><a href="#_advanced_features">Advanced features</a>
 <ul class="sectlevel2">
 <li><a href="#virtual-keys">Virtual keys</a></li>
@@ -2012,8 +2028,14 @@ The <a href="#clipboard-actions">clipboard actions</a> may output unicode charac
 </div>
 <div class="paragraph">
 <p>The <code>unicode</code> (or <code>🔣</code>) action accepts a single unicode character (but not
-a composed character, so 🤲, but not 🤲🏿).
-If you want to output a glyph that is composed of multiple codepoints,
+a composed character, so 🤲, but not 🤲🏿),
+or a single unicode number prefixed with <code>U+</code>.
+For example, both of these actions are the same:
+- <code>(unicode 🚆)</code>
+- <code>(unicode U+1F686)</code></p>
+</div>
+<div class="paragraph">
+<p>If you want to output a glyph that is composed of multiple codepoints,
 you can use <a href="#macro">macro</a> with multiple <code>unicode</code> actions.</p>
 </div>
 <div class="paragraph">
@@ -2042,6 +2064,10 @@ application.
 <td class="content">
 If using Linux, make sure to look at the
 <a href="#linux-only-linux-unicode-u-code">unicode behaviour customization</a> in defcfg.
+Furthermore, on Wayland the unicode mechanism may be broken entirely.
+On Wayland you can install then use the <code>wtype</code> program,
+using <a href="#cmd">cmd</a> to execute it.
+For example: <code>(cmd wtype á)</code>
 </td>
 </tr>
 </table>
@@ -2537,9 +2563,17 @@ vertical/horizontal scrolling, and move the mouse.</p>
 </tbody>
 </table>
 <div class="paragraph">
-<p>In Linux and Windows-Interception,
+<p>In Linux and Windows,
 the hold actions can be used within <code>defsrc</code> and <code>deflayermap</code>
 to remap mouse buttons like keyboard keys.</p>
+</div>
+<div class="paragraph">
+<p>NOTE:
+On Windows, the Kanata process must be restarted
+for it to begin or to stop handling mouse events;
+changing defsrc then live-reloading will not
+begin handling mouse events
+if defsrc previously did not have any mouse events in defsrc.</p>
 </div>
 <div class="paragraph">
 <p><strong>Description</strong></p>
@@ -2568,7 +2602,7 @@ to remap mouse buttons like keyboard keys.</p>
 </div>
 <div class="paragraph">
 <p>The mouse button will be held while the key mapped to it is held.
-Using Linux and Windows-Interception,
+Only on Linux and Windows,
 the above actions are also usable in <code>defsrc</code>
 to enable remapping specified mouse actions in your layers,
 like you would with keyboard keys.</p>
@@ -2679,6 +2713,17 @@ corresponding to up, down, left, right respectively:
 <code>mwu</code>, <code>mwd</code>, <code>mwl</code>, <code>mwr</code>.</p>
 </div>
 <div class="paragraph">
+<p>The remapping of mouse events is only effective on Linux and Windows.</p>
+</div>
+<div class="paragraph">
+<p>NOTE:
+On Windows, the Kanata process must be restarted
+for it to begin or to stop handling mouse events;
+changing defsrc then live-reloading will not
+begin handling mouse events
+if defsrc previously did not have any mouse events in defsrc.</p>
+</div>
+<div class="paragraph">
 <p><strong>Description</strong></p>
 </div>
 <div class="paragraph">
@@ -2703,7 +2748,7 @@ corresponding to up, down, left, right respectively:
 <div class="paragraph">
 <p>All of these actions accept two number strings. The first is the interval
 (unit: ms) between scroll actions. The second number is the distance
-(unit: arbitrary). In both Windows and Linux, 120 distance units is equivalent
+(unit: arbitrary). In both Linux and Windows, 120 distance units is equivalent
 to a notch movement on a physical wheel. You can play with the parameters to
 see what feels correct to you. Both numbers must be in the range [1,65535].</p>
 </div>
@@ -2722,7 +2767,7 @@ it will likely be a better experience to use a distance value that is a multiple
 </table>
 </div>
 <div class="paragraph">
-<p>On Linux and Interception, you can also choose to read from a mouse device.
+<p>On Linux and Windows, you can also choose to read from a mouse device.
 When doing so, using the <code>mwu</code>, <code>mwd</code>, <code>mwl</code>, <code>mwr</code> key names in <code>defsrc</code>
 allow you to remap the mouse scroll up/down/left/right actions like you would
 with keyboard keys.</p>
@@ -2815,7 +2860,7 @@ at a constant rate until a maximum is reached.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Number of milliseconds between move activations.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$acceletaion-time</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$acceleration-time</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Number of milliseconds until max distance per activation is reached.</p></td>
 </tr>
 <tr>
@@ -3398,8 +3443,9 @@ results in <code>$tap-action</code> activating.</p></td>
 <pre>(tap-hold-press $tap-repress-timeout $hold-timeout $tap-action $hold-action)
 (tap-hold-release $tap-repress-timeout $hold-timeout $tap-action $hold-action)
 (tap-hold-press-timeout $tap-repress-timeout $hold-timeout $tap-action $hold-action $timeout-action)
-(tap-hold-release-timeout $tap-repress-timeout $hold-timeout $tap-action $hold-action $timeout-action)
+(tap-hold-release-timeout $tap-repress-timeout $hold-timeout $tap-action $hold-action $timeout-action [?reset-timeout-on-press])
 (tap-hold-release-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys)
+(tap-hold-release-tap-keys-release $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-trigger-keys-on-press $tap-trigger-keys-on-press-then-release)
 (tap-hold-except-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys)</pre>
 </div>
 </div>
@@ -3425,13 +3471,26 @@ If the defined timeout elapses, <code>$timeout-action</code> will activate.</p><
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-release-timeout</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Activate <code>$hold-action</code> early if held and another input key is pressed and released.
-If the defined timeout elapses, <code>$timeout-action</code> will activate.</p></td>
+If the defined timeout elapses, <code>$timeout-action</code> will activate.
+Optionally include <code>reset-timeout-on-press</code> to reset timeout duration on a new press,
+giving more time for a subsequent release to activate hold instead of timeout.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-release-keys</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Activate <code>$hold-action</code> early if held and another input key is pressed and released.
 The <code>$tap-keys</code> parameter is a list of key names.
 Activates <code>$tap-action</code> early if a key within <code>$tap-keys</code> is pressed before hold activates.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-release-tap-keys-release</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Activate <code>$hold-action</code> early if held and another input key is pressed and released.
+The <code>$tap-keys-&#8230;&#8203;</code> parameters are lists of key names.
+Activate <code>$tap-action</code> early
+if a key within <code>$tap-trigger-keys-on-press</code>
+is pressed before hold activates
+Activate <code>$tap-action</code> early
+if a key within <code>$tap-trigger-keys-on-press-then-release</code>
+is pressed then released before hold activates.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-except-keys</code></p></td>
@@ -3644,6 +3703,15 @@ variants. The 5th parameter is another action, which will activate if the hold
 timeout expires as opposed to being triggered by other key actions, whereas the
 non <code>-timeout</code> variants will activate the hold action in both cases.</p>
 </div>
+<div class="paragraph">
+<p>The <code>release</code> variant also accepts an optional 6th argument,
+<code>reset-timeout-on-press</code> which if included changes the timeout behaviour.
+This flag will make the timeout duration reset if a new key is pressed.
+This may result in longer timeouts,
+but can help with more consistent hold activations;
+because it may be challenging to release a key in time
+to activate the hold action instead of the timeout action.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -3668,12 +3736,33 @@ that are in <code>deflayer</code>, <code>defalias</code>, etc. for the correspon
 <div class="title">Example:</div>
 <div class="content">
 <pre class="highlight"><code>(defalias
-  ;; tap: o    hold: arrows layer    timeout: backspace
-  oat (tap-hold-press-timeout   200 200 o @arr bspc)
-  ;; tap: e    hold: chords layer    timeout: esc
-  ect (tap-hold-release-timeout 200 200 e @chr esc)
   ;; tap: u    hold: misc layer      early tap if any of: (a o e) are pressed
   umk (tap-hold-release-keys 200 200 u @msc (a o e))
+)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>tap-hold-release-tap-keys-release</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This variant behaves nearly the same as <code>tap-hold-release-keys</code>,
+but has another condition with respect to the eager tap.
+It accepts a second list that activates the eager tap
+if the any key listed within is pressed then released;
+as opposed to only on a press.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre class="highlight"><code>(defalias
+  ;; tap: u    hold: misc layer      early tap if any of:
+  ;;                                 (z x c v) are pressed, OR
+  ;;                                 (a s d f) are pressed THEN released
+  umk2 (tap-hold-release-tap-keys-release 200 200 u @msc (z x c v) (a s d f))
 )</code></pre>
 </div>
 </div>
@@ -3702,10 +3791,6 @@ that are in <code>deflayer</code>, <code>defalias</code>, etc. for the correspon
 <div class="title">Example:</div>
 <div class="content">
 <pre class="highlight"><code>(defalias
-  ;; tap: o    hold: arrows layer    timeout: backspace
-  oat (tap-hold-press-timeout   200 200 o @arr bspc)
-  ;; tap: e    hold: chords layer    timeout: esc
-  ect (tap-hold-release-timeout 200 200 e @chr esc)
   ;; tap: u    hold: misc layer      always tap if any of: (a o e) are pressed
   umk (tap-hold-except-keys 200 200 u @msc (a o e))
 )</code></pre>
@@ -4405,8 +4490,8 @@ With <code>break</code>, further actions will not activate.</p></td>
 <p>The logic check is a list.
 The items within the list can either be key names or a special list check.
 A key name item evaluates to true if that key name
-is a currently active key output of Kanata upon activating <code>switch</code>
-The outer-most list evaluates to true as whole
+is a currently active key output of Kanata upon activating <code>switch</code>.
+The outer-most list evaluates to true
 if any of the items evaluates to true.</p>
 </div>
 <div class="listingblock">
@@ -6724,6 +6809,158 @@ a non-applicable operating system.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_command_line_arguments">Command line arguments<a id="cli-args"></a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When executing Kanata, you can pass a variety of arguments to the program
+to change Kanata&#8217;s behaviour.
+This section describes the purpose and usage of these arguments.</p>
+</div>
+<div class="sect2">
+<h3 id="args-help">Show help text: <code>-h</code>, <code>--help</code></h3>
+<div class="paragraph">
+<p>Only show help text that describes these arguments,
+then exit the program.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-config-file">Configuration file(s): <code>-c</code>, <code>--cfg</code></h3>
+<div class="paragraph">
+<p>Configuration file(s) to use with Kanata.
+When not specified, default file locations are checked.
+The default files checked depend on your operating system
+and are described by <code>--help</code>.</p>
+</div>
+<div class="paragraph">
+<p>This argument can be used more than once;
+see <a href="#live-reload">Live reload</a> to understand the behaviour of this.
+The startup configuration will be the first file listed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-tcp">TCP server address: <code>-p</code>, <code>--port</code></h3>
+<div class="paragraph">
+<p>Enable the TCP server capability and listen on either:
+- a specified port, on all IP addresses
+- a specifiec <code>IP:PORT</code></p>
+</div>
+<div class="paragraph">
+<p>This enables use cases such as
+<a href="https://github.com/jtroo/kanata?tab=readme-ov-file#community-projects-related-to-kanata">application aware switching</a>.</p>
+</div>
+<div class="paragraph">
+<p>The protocol is plaintext JSON, not formally documented anywhere at this time.
+The source of truth is the
+<a href="https://github.com/jtroo/kanata/blob/main/tcp_protocol/src/lib.rs">TCP protocol code</a>.</p>
+</div>
+<div class="paragraph">
+<p>You may also be interested in the
+<a href="https://github.com/jtroo/kanata/blob/main/example_tcp_client/src/main.rs">example client</a>.</p>
+</div>
+<div class="sect3">
+<h4 id="_tcp_configuration_reload_commands">TCP Configuration Reload Commands</h4>
+<div class="paragraph">
+<p>The TCP server supports live configuration reloading through the following commands:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>{"Reload":{}}</code> - Reload the current configuration file (equivalent to <code>lrld</code> keyboard action)</p>
+</li>
+<li>
+<p><code>{"ReloadNext":{}}</code> - Reload the next configuration file (equivalent to <code>lrnx</code> keyboard action)</p>
+</li>
+<li>
+<p><code>{"ReloadPrev":{}}</code> - Reload the previous configuration file (equivalent to <code>lrpv</code> keyboard action)</p>
+</li>
+<li>
+<p><code>{"ReloadNum":{"index":N}}</code> - Reload configuration file at index N (equivalent to <code>lrld-num N</code> keyboard action)</p>
+</li>
+<li>
+<p><code>{"ReloadFile":{"path":"/path/to/config.kbd"}}</code> - Reload a specific configuration file (equivalent to <code>lrld-file</code> keyboard action)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These commands mirror the existing keyboard live reload actions and allow external tools to trigger configuration reloads via TCP.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-quiet">Disable logs other than errors: <code>-q</code>, <code>--quiet</code></h3>
+<div class="paragraph">
+<p>Silence info and warning logs so that only errors are logged.
+This might be desirable when running in the background as a system service.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-debug">Enable debug logs: <code>-d</code>, <code>--debug</code></h3>
+<div class="paragraph">
+<p>Add extra debug logging.
+This is helpful when diagnosing an issue
+or discovering key names.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-trace">Enable trace logs: <code>-t</code>, <code>--trace</code></h3>
+<div class="paragraph">
+<p>Add extra trace logging.
+Also includes debug logging.
+This is sometimes helpful when diagnosing an issue,
+but is very verbose.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-nodelay">Remove startup delay: <code>-n</code>, <code>--nodelay</code></h3>
+<div class="paragraph">
+<p>By default, Kanata adds a delay before reading keyboard inputs.
+This helps protect against stale states
+when started from a terminal.</p>
+</div>
+<div class="paragraph">
+<p>However, this may be undesirable
+when running as a background service.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-check">Only check configuration: <code>--check</code></h3>
+<div class="paragraph">
+<p>Check the configuration file validity and then exit.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-log-layer-changes">Force log changes: <code>--log-layer-changes</code></h3>
+<div class="paragraph">
+<p>Your final desired <code>defcfg</code> could be to have logging of layer changes as false.
+However, for testing purposes you may want to temporarily log the layers.
+This configuration forces logging to happen for this use case.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-linux-dev-symlink">Linux only - Device symlink path: <code>-s</code>, <code>--symlink-path</code></h3>
+<div class="paragraph">
+<p>If you want another program to consume the Kanata device output,
+you can use this flag to have a consistent device filesystem path.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-wait-device">Linux only - Wait before device grab attempt: <code>-w</code>, <code>--wait-device-ms</code></h3>
+<div class="paragraph">
+<p>Some devices take a while to become ready and can fail to be grabbed.
+This configuration adds a delay before trying to grab devices
+in case this is an issue impacting you.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-macos-list-devices">macOS only - Only list keyboards: <code>-l</code>, <code>--list</code></h3>
+<div class="paragraph">
+<p>List keyboard names that can be used
+within defcfg and then exit.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_advanced_features">Advanced features<a id="advanced-features"></a></h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -6746,6 +6983,12 @@ Activate a virtual key action when releasing the associated input key.</p>
 <li>
 <p><code>(on-idle &lt;idle time&gt; &lt;action&gt; &lt;virtual key name&gt;)</code>:
 Activate a virtual key action when kanata has been idle
+for at least <code>idle time</code> milliseconds.</p>
+</li>
+<li>
+<p><code>(on-physical-idle &lt;idle time&gt; &lt;action&gt; &lt;virtual key name&gt;)</code>:
+Activate a virtual key action when the physical keyboard has
+had all keys released
 for at least <code>idle time</code> milliseconds.</p>
 </li>
 <li>
@@ -6793,7 +7036,9 @@ Even if the keyboard is idle, kanata may not yet be idle.
 For example, if a long-running macro is playing,
 or kanata is waiting for the timeout of actions such as <code>caps-word</code> or <code>tap-dance</code>,
 kanata is not yet idle, and the tick count for the <code>&lt;idle time&gt;</code> parameter
-will not yet be counting even if you no longer have any keyboard keys pressed.</p>
+will not yet be counting even if you no longer have any keyboard keys pressed.
+The variant <code>on-physical-idle</code> may be more desirable if you want the timer
+to only start based on having all keyboard keys be released.</p>
 </div>
 <div class="listingblock">
 <div class="title">Example:</div>
@@ -7149,6 +7394,39 @@ The second parameter is an override for <code>sequence-input-mode</code>:</p>
 
 ;; Enter sequence mode and input . with a timeout of 250 and using hidden-delay-type
 (defalias dot-sequence (macro (sequence 250 hidden-delay-type) 10 .))</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sequence_noerase">sequence-noerase</h4>
+<div class="paragraph">
+<p>When you have a keyboard locale that uses dead keys,
+you may be pressing two keys that only actually output one symbol.
+By default, when the <code>visible-backspaced</code> input mode does the backtracking backspaces,
+it backspaces according to input count.
+With dead keys, this may result in too many backspaces.</p>
+</div>
+<div class="paragraph">
+<p>The <code>sequence-noerase</code> action is a no-output action
+that tells the sequences action to have one fewer backspace
+when backtracking with visible-backspaced.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre class="highlight"><code>(deflayermap (base)
+  0 sldr
+  u (t! maybe-noerase u)
+)
+(deftemplate maybe-noerase (char)
+  (multi
+    (switch
+      ((key-history ' 1)) (sequence-noerase 1) fallthrough
+      () $char break
+   ))
+)
+(defvirtualkeys seq-output-1 (macro a b c d e f g))
+(defseq seq-output-1 (' u))</code></pre>
 </div>
 </div>
 </div>
