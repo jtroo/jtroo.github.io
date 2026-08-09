@@ -622,6 +622,12 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#defoverridesv2">defoverridesv2</a></li>
 </ul>
 </li>
+<li><a href="#templates">Templates</a>
+<ul class="sectlevel2">
+<li><a href="#_if_equal">if-equal</a></li>
+<li><a href="#concat-in-deftemplate">concat in deftemplate</a></li>
+</ul>
+</li>
 <li><a href="#_include_other_files">Include other files</a></li>
 <li><a href="#platform">Platform-specific configuration</a></li>
 <li><a href="#environment">Environment-conditional configuration</a></li>
@@ -630,6 +636,7 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#chordsv2-processing-order">Action processing order</a></li>
 </ul>
 </li>
+<li><a href="#definputdevices">definputdevices</a></li>
 <li><a href="#optional-defcfg-options">defcfg options</a>
 <ul class="sectlevel2">
 <li><a href="#danger-enable-cmd">danger-enable-cmd</a></li>
@@ -645,10 +652,11 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#block-unmapped-keys">block-unmapped-keys</a></li>
 <li><a href="#rapid-event-delay">rapid-event-delay</a></li>
 <li><a href="#chords-v2-min-idle">chords-v2-min-idle</a></li>
+<li><a href="#tap-hold-require-prior-idle">tap-hold-require-prior-idle</a></li>
 <li><a href="#override-release-on-activation">override-release-on-activation</a></li>
 <li><a href="#allow-hardware-repeat">allow-hardware-repeat</a></li>
 <li><a href="#alias-to-trigger-on-load">alias-to-trigger-on-load</a></li>
-<li><a href="#mouse-movement-key">Linux or Windows-interception only: mouse-movement-key</a></li>
+<li><a href="#mouse-movement-key">Linux, macOS, or Windows-interception only: mouse-movement-key</a></li>
 <li><a href="#linux-only-linux-dev">Linux only: linux-dev</a></li>
 <li><a href="#linux-only-linux-dev-names-include">Linux only: linux-dev-names-include</a></li>
 <li><a href="#linux-only-linux-dev-names-exclude">Linux only: linux-dev-names-exclude</a></li>
@@ -662,6 +670,7 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#linux-only-linux-output-device-bus-type">Linux only: linux-output-device-bus-type</a></li>
 <li><a href="#macos-only-macos-dev-names-include">macOS only: macos-dev-names-include</a></li>
 <li><a href="#macos-only-macos-dev-names-exclude">macOS only: macos-dev-names-exclude</a></li>
+<li><a href="#macos-only-macos-continue-if-no-devs-found">macOS only: macos-continue-if-no-devs-found</a></li>
 <li><a href="#windows-only-windows-altgr">Windows only: windows-altgr</a></li>
 <li><a href="#_windows_only_windows_interception_mouse_hwid">Windows only: windows-interception-mouse-hwid</a></li>
 <li><a href="#_windows_only_windows_interception_mouse_hwids">Windows only: windows-interception-mouse-hwids</a></li>
@@ -696,6 +705,7 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#args-linux-dev-symlink">Linux only - Device symlink path: <code>-s</code>, <code>--symlink-path</code></a></li>
 <li><a href="#args-wait-device">Linux only - Wait before device grab attempt: <code>-w</code>, <code>--wait-device-ms</code></a></li>
 <li><a href="#args-macos-list-devices">macOS only - Only list keyboards: <code>-l</code>, <code>--list</code></a></li>
+<li><a href="#args-macos-release-grab-on-lock">macOS only - Release grab on lock / user switch: <code>--release-grab-on-lock</code></a></li>
 </ul>
 </li>
 <li><a href="#_advanced_features">Advanced features</a>
@@ -704,7 +714,6 @@ kbd{background:#2f2f2f;!important}
 <li><a href="#sequences">Sequences</a></li>
 <li><a href="#input-chords">Input chords</a></li>
 <li><a href="#defaliasenvcond">defaliasenvcond</a></li>
-<li><a href="#templates">Templates</a></li>
 <li><a href="#custom-tap-hold-behaviour">Custom tap-hold behaviour</a></li>
 <li><a href="#fancy-key-symbols">Fancy key symbols</a></li>
 <li><a href="#windows-only-work-elevated">Windows only: enable in elevated windows</a></li>
@@ -742,6 +751,12 @@ See below for links to specific guide versions.</p>
 <div class="ulist">
 <ul>
 <li>
+<p><a href="/config-1.12.0.html">v1.12.0</a></p>
+</li>
+<li>
+<p><a href="/config-1.11.0.html">v1.11.0</a></p>
+</li>
+<li>
 <p><a href="/config-1.10.1.html">v1.10.1</a></p>
 </li>
 <li>
@@ -755,9 +770,6 @@ See below for links to specific guide versions.</p>
 </li>
 <li>
 <p><a href="/config-1.8.0.html">v1.8.0</a></p>
-</li>
-<li>
-<p><a href="/config-1.7.0.html">v1.7.0</a></p>
 </li>
 </ul>
 </div>
@@ -1150,6 +1162,28 @@ e.g. in the example above, these affect keys other than <code>caps</code>.</p>
 <div class="paragraph">
 <p>If a key is not mapped explicitly or through these wildcards, it will be implicitly mapped to a <a href="#transparent-key">transparent key</a>.</p>
 </div>
+<div class="paragraph">
+<p><strong>Key processing</strong></p>
+</div>
+<div class="paragraph">
+<p>The <code>$input</code> keys in all <code>deflayermap</code> sections will be processed by kanata, even if:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the layer is inactive</p>
+</li>
+<li>
+<p>the key is omitted from <code>defsrc</code></p>
+</li>
+<li>
+<p>the <code>process-unmapped-keys</code> configuration is omitted, set to <code>no</code>, or the key is within <code>(all-except &#8230;&#8203;)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This is particularly relevant for the issue described in <a href="#windows-only-windows-altgr">Windows only: windows-altgr</a>.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1246,6 +1280,24 @@ On Windows, you should use either <code>kanata_winIOv2.exe</code>
 or Interception when using key names according to the browser <code>event.code</code>.
 The default <code>kanata.exe</code> does not do mappings according to the browser <code>event.code</code>
 key names.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+On macOS, the ISO "#" key to the left of Enter reports
+<code>event.code</code> as <code>Backslash</code> in the browser, but the operating system
+delivers it to kanata as a distinct HID usage that the regular
+<code>\</code>/<code>Backslash</code> name does not match. Use the name <code>non_us_pound</code>
+(aliases: <code>NonUSPound</code>, <code>nuhs</code>) for that physical key on macOS. If
+you want the same config to work on Linux as well, pair this with
+<code>deflocalkeys-linux</code> to map evdev code 43 to the same name.
 </td>
 </tr>
 </table>
@@ -2643,7 +2695,7 @@ if defsrc previously did not have any mouse events in defsrc.</p>
 </div>
 <div class="paragraph">
 <p>The mouse button will be held while the key mapped to it is held.
-Only on Linux and Windows,
+On Linux, Windows, and macOS,
 the above actions are also usable in <code>defsrc</code>
 to enable remapping specified mouse actions in your layers,
 like you would with keyboard keys.</p>
@@ -2754,7 +2806,7 @@ corresponding to up, down, left, right respectively:
 <code>mwu</code>, <code>mwd</code>, <code>mwl</code>, <code>mwr</code>.</p>
 </div>
 <div class="paragraph">
-<p>The remapping of mouse events is only effective on Linux and Windows.</p>
+<p>The remapping of mouse button and wheel events is effective on Linux, Windows, and macOS.</p>
 </div>
 <div class="paragraph">
 <p>NOTE:
@@ -2762,7 +2814,12 @@ On Windows, the Kanata process must be restarted
 for it to begin or to stop handling mouse events;
 changing defsrc then live-reloading will not
 begin handling mouse events
-if defsrc previously did not have any mouse events in defsrc.</p>
+if defsrc previously did not have any mouse events in defsrc.
+On macOS, live-reload can install the mouse event tap on the fly
+when a new config introduces mouse keys, but stopping the tap
+once installed still requires a restart.
+Mouse input on macOS requires Accessibility or Input Monitoring
+permission in System Settings &gt; Privacy &amp; Security.</p>
 </div>
 <div class="paragraph">
 <p><strong>Description</strong></p>
@@ -3528,7 +3585,7 @@ Example:
 </div>
 <div class="paragraph">
 <p>The <code>tap-hold</code> action lets you activate different actions
-depending it a key is tapped or held.</p>
+depending if a key is tapped or held.</p>
 </div>
 <div class="listingblock">
 <div class="title">Syntax:</div>
@@ -3573,7 +3630,11 @@ results in <code>$tap-action</code> activating.</p></td>
 (tap-hold-release-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys)
 (tap-hold-release-tap-keys-release $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-trigger-keys-on-press $tap-trigger-keys-on-press-then-release)
 (tap-hold-except-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys)
-(tap-hold-tap-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys)</pre>
+(tap-hold-tap-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys)
+(tap-hold-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action [options...])
+(tap-hold-opposite-hand $timeout $tap-action $hold-action [options...])
+(tap-hold-opposite-hand-release $timeout $tap-action $hold-action [options...])
+(tap-hold-order $tap-repress-timeout $buffer-ms $tap-action $hold-action [options...])</pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -3622,7 +3683,7 @@ is pressed then released before hold activates.</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-except-keys</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The <code>$tap-keys</code> parameter is a list of key names.
-Activates $tap-action if a key within $tap-keys is pressed
+Activates <code>$tap-action</code> if a key within <code>$tap-keys</code> is pressed
 or if the action key is released before hold timeout.
 No key is ever output until the action key is released
 or another key is pressed,
@@ -3637,8 +3698,48 @@ when other keys are pressed and released.
 Waits for full <code>$hold-timeout</code> before activating <code>$hold-action</code>.
 This is useful for home row mods where fast typing should not trigger modifiers.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-keys</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A flexible tap-hold variant with named key list options.
+Options are: <code>(tap-on-press &lt;keys&#8230;&#8203;&gt;)</code> activates <code>$tap-action</code> early if a listed key is pressed;
+<code>(tap-on-press-release &lt;keys&#8230;&#8203;&gt;)</code> activates <code>$tap-action</code> early if a listed key is pressed then released;
+<code>(hold-on-press &lt;keys&#8230;&#8203;&gt;)</code> activates <code>$hold-action</code> early if a listed key is pressed.
+For any other key: if that key is pressed and released while this key is waiting,
+<code>$hold-action</code> is triggered early (PermissiveHold behavior).
+All list options are optional.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-opposite-hand</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Resolves to <code>$hold-action</code> when a key from the opposite hand (per <code>defhands</code>) is pressed.
+Requires a <code>defhands</code> directive. Supports list-form options for fine-grained control.
+See <a href="#_defhands_and_tap_hold_opposite_hand">defhands and tap-hold-opposite-hand</a> below.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-opposite-hand-release</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Like <code>tap-hold-opposite-hand</code> but waits for the interrupting key to be pressed AND released
+before committing. This avoids misfires on fast same-hand rolls where keystrokes briefly overlap.
+Requires a <code>defhands</code> directive. Supports the same options as <code>tap-hold-opposite-hand</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap-hold-order</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Resolves purely by key release order, with no timeout.
+If the tap-hold key is released before the other key, activates <code>$tap-action</code>;
+if the other key is released first (while the tap-hold key is still held), activates <code>$hold-action</code>.
+<code>$buffer-ms</code> is a grace period after the tap-hold key is pressed during which
+release-order logic is ignored so that fast typing resolves as tap.
+Optionally, <code>(require-prior-idle &lt;ms&gt;)</code> can short-circuit to tap when a different key
+was pressed within that many milliseconds before the tap-hold key;
+<code>require-prior-idle</code> checks prior typing activity before release-order logic begins,
+whereas <code>buffer-ms</code> creates an unconditional tap-only window after the key is pressed.
+This option is available on all tap-hold variants; see <a href="#tap-hold-require-prior-idle">tap-hold-require-prior-idle</a>.</p></td>
+</tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>All <code>tap-hold</code> variants support an optional trailing <code>(require-prior-idle &lt;ms&gt;)</code> option
+to override the global <a href="#tap-hold-require-prior-idle">tap-hold-require-prior-idle</a> setting for that specific action.
+Use <code>(require-prior-idle 0)</code> to disable idle detection for a specific key.</p>
+</div>
 <div class="paragraph">
 <p><strong>Description</strong></p>
 </div>
@@ -3905,6 +4006,13 @@ It accepts a second list that activates the eager tap
 if the any key listed within is pressed then released;
 as opposed to only on a press.</p>
 </div>
+<div class="paragraph">
+<p>The keys in the 5th and 6th parameters correspond to the physical input keys,
+or in other words the key that corresponds to <code>defsrc</code>.
+This is in contrast to the <code>fork</code> and <code>switch</code> actions
+which operates on outputted keys, or in other words the outputs
+that are in <code>deflayer</code>, <code>defalias</code>, etc. for the corresponding <code>defsrc</code> key.</p>
+</div>
 <div class="listingblock">
 <div class="title">Example:</div>
 <div class="content">
@@ -3972,6 +4080,116 @@ or in other words the key that corresponds to <code>defsrc</code>.</p>
   ;; other keys do NOT trigger early hold
   ath (tap-hold-tap-keys 200 200 a lsft (s d f))
 )</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_defhands_and_tap_hold_opposite_hand">defhands and tap-hold-opposite-hand</h4>
+<div class="paragraph">
+<p><code>defhands</code> assigns physical keys to <code>left</code> / <code>right</code> hand groups.
+<code>tap-hold-opposite-hand</code> uses this to resolve hold when the next key
+is on the opposite hand — reducing misfires compared to manual key lists.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>(defhands
+  (left  q w e r t a s d f g z x c v b)
+  (right y u i o p h j k l ; n m , . /))
+
+(defalias
+  fctl (tap-hold-opposite-hand 180 f lctl))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>defhands</code> rules: at most one block; each group (<code>(left &#8230;&#8203;)</code>/<code>(right &#8230;&#8203;)</code>) at most once;
+a key cannot appear in both groups; partial definitions (only one hand) are allowed;
+unlisted keys have no hand assignment.</p>
+</div>
+<div class="paragraph">
+<p><code>tap-hold-opposite-hand</code> takes <code>$timeout $tap-action $hold-action</code> followed by
+optional option lists. Most use <code>(name value)</code>, while <code>neutral-keys</code> uses
+followup key atoms: <code>(neutral-keys spc tab &#8230;&#8203;)</code>.
+It requires <code>defhands</code> to be defined.
+Internally it uses the same <code>HoldTapConfig::Custom</code> machinery as <code>tap-hold-release-keys</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Values</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(timeout &lt;value&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap</code>, <code>hold</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Action when hold timeout elapses (optimized for home-row-mod behavior).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(same-hand &lt;value&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap</code>, <code>hold</code>, <code>ignore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Action when a same-hand key is pressed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(neutral-keys key &#8230;&#8203;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">one or more key names</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(empty)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Keys treated as neutral, overriding their <code>defhands</code> assignment.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(neutral &lt;value&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap</code>, <code>hold</code>, <code>ignore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ignore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Action when a <code>neutral-keys</code> key is pressed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(unknown-hand &lt;value&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tap</code>, <code>hold</code>, <code>ignore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ignore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Action when a key not in <code>defhands</code> is pressed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(require-prior-idle &lt;ms&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code>–<code>65535</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(disabled)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If a key was pressed within this many ms before the tap-hold key, resolve as tap immediately. Useful for avoiding accidental holds during fast typing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(tap-repress-timeout &lt;ms&gt;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code>–<code>65535</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the same key is re-pressed within this many ms after a tap, immediately tap again instead of entering the hold decision. <code>0</code> disables (every press enters the hold decision). See <a href="#tap-hold">tap repress timeout</a> for details.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>When a value is <code>ignore</code>, that key press is skipped and the action
+waits for the next key or timeout.</p>
+</div>
+<div class="paragraph">
+<p>Example with options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>(defalias
+  fctl (tap-hold-opposite-hand 180 f lctl
+    (same-hand ignore)
+    (timeout hold)
+    (neutral-keys spc tab)
+    (neutral tap)))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <code>cfg_samples/opposite-hand-hrm.kbd</code> for a full working example.</p>
 </div>
 </div>
 </div>
@@ -4689,7 +4907,9 @@ if any of the items evaluates to true.</p>
 (input         $input-type $key-name)
 (input-history $input-type $key-name $input-recency)
 (layer      $layer-name)
-(base-layer $layer-name)</code></pre>
+(base-layer $layer-name)
+(device-history $device-id $device-recency)
+(cmd-exit   $exit-code)</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -4747,8 +4967,30 @@ The max recency is 8.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the most-recently-switched-to layer
 from a <code>layer-switch</code> action matches <code>$layer-name</code>.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>device-history</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluates to true if the device in the <code>$device-recency</code> slot
+matches <code>$device-id</code>. A recency of 1 is the most recent device
+that sent an event. The max recency is 8.
+Device IDs are defined via <a href="#definputdevices"><code>definputdevices</code></a>.
+Currently supported on macOS only.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cmd-exit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Requires a binary compiled with <code>cmd</code> enabled.
+  Evaluates to true if the process exit code of the most recent <code>init-cmd</code> matches <code>$exit-code</code>.
+  The <code>$exit-code</code> parameter must be a 32 bit signed integer.</p></td>
+</tr>
 </tbody>
 </table>
+<div class="listingblock">
+<div class="title">Syntax of optional <code>switch</code> argument <code>init-cmd</code>:</div>
+<div class="content">
+<pre class="highlight"><code>(switch
+  (init-cmd $binary $arg1 $arg2 ... $argN)
+  $logic-check1 $action1 $post-activate1 ...)</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p><strong>Description</strong></p>
 </div>
@@ -5103,6 +5345,30 @@ if <code>layer-switch</code> has never been activated.</p>
                  () z break
   )
 )</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_init_cmd_and_cmd_exit"><code>init-cmd</code> and <code>cmd-exit</code></h4>
+<div class="paragraph">
+<p>With a <a href="#cmd">cmd-enabled</a> Kanata variant
+you have access to the <code>init-cmd</code> optional switch parameter
+which goes before the normal switch syntax.
+This will execute a program synchronously,
+blocking the rest of Kanata&#8217;s execution until it completes.
+What this enables is later use of <code>cmd-exit</code> logic item
+which can output different actions based on which exit code is returned by the command.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre class="highlight"><code>(defalias
+  my-switch-with-cmd (switch
+    (init-cmd powershell.exe -c "if (-not (Test-Path 'myfile')) { exit 1 }")
+    ((cmd-exit 0)) a break
+    ((cmd-exit 1)) b break
+    () c break
+  ))</code></pre>
 </div>
 </div>
 </div>
@@ -5705,6 +5971,272 @@ the override will activate.
 </div>
 </div>
 <div class="sect1">
+<h2 id="templates">Templates</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The top-level configuration item <code>deftemplate</code>
+declares a template that can be expanded multiple times
+via the list item <code>template-expand</code>.
+The short form of <code>template-expand</code> is <code>t!</code>.</p>
+</div>
+<div class="paragraph">
+<p>The parameters to <code>deftemplate</code> in order are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Template name</p>
+</li>
+<li>
+<p>List of template variables</p>
+</li>
+<li>
+<p>Template content (any combination of lists / strings)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Within the template content, variable names prefixed with <code>$</code>
+will be substituted with the expression passed into <code>template-expand</code>.</p>
+</div>
+<div class="paragraph">
+<p>The list item <code>template-expand</code> can be placed as a top-level list
+or within another list.
+Its parameters in order are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>template name</p>
+</li>
+<li>
+<p>parameters to substitute into the template</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Template expansion happens after file includes and before any other parsing.
+One consequence of this early parsing is that variables defined in <code>defvar</code>
+are <strong>not</strong> substituted when used inside of <code>template-expand</code>.
+This has consequences for condtional content, e.g. with <code>if-equal</code>.
+This is discussed further in Example 5.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Example 1:</p>
+</div>
+<div class="paragraph">
+<p>In a simple example, let&#8217;s say you wanted to set a large group of keys
+to do something different when you&#8217;re holding alt. Yes, this could also
+be handled with remapping alt to a layer shift, but there are cases where
+you wouldn&#8217;t want this. Rather than retyping the code with <code>fork</code> and
+<code>unmod</code> (to release alt) a bunch of times, you could template it like so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>(deftemplate alt-fork (original-action new-action)
+  (fork $original-action (multi (unmod (ralt lalt) nop0) $new-action) (lalt ralt))
+)
+(defsrc 1 2 3)
+(defalias fn1 (template-expand alt-fork 1 f1))
+;; Templates are a simple text substitution, so the above is exactly equivalent to:
+;; (defalias fn1 (fork 1 (multi (unmod (ralt lalt) nop0) f1) (lalt ralt)))
+(defalias fn2 (template-expand alt-fork 2 f2))
+;; You can use t! as a short form of template-expand
+(defalias fn3 (t! alt-fork 3 f3))
+(deflayer default @fn1 @fn2 @fn3)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example 2:</div>
+<div class="content">
+<pre class="highlight"><code>(defvar chord-timeout 200)
+(defcfg process-unmapped-keys yes)
+
+;; This template defines a chord group and aliases that use the chord group.
+;; The purpose is to easily define the same chord position behaviour
+;; for multiple layers that have different underlying keys.
+(deftemplate left-hand-chords (chordgroupname k1 k2 k3 k4 alias1 alias2 alias3 alias4)
+  (defalias
+    $alias1 (chord $chordgroupname $k1)
+    $alias2 (chord $chordgroupname $k2)
+    $alias3 (chord $chordgroupname $k3)
+    $alias4 (chord $chordgroupname $k4)
+  )
+  (defchords $chordgroupname $chord-timeout
+    ($k1) $k1
+    ($k2) $k2
+    ($k3) $k3
+    ($k4) $k4
+    ($k1 $k2) lctl
+    ($k3 $k4) lsft
+  )
+)
+
+(template-expand left-hand-chords qwerty a s d f qwa qws qwd qwf)
+;; t! is short for template-expand
+(t! left-hand-chords dvorak a o e u dva dvo dve dvu)
+
+(defsrc a s d f)
+(deflayer dvorak @dva @dvo @dve @dvu)
+(deflayer qwerty @qwa @qws @qwd @qwf)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example 3:</div>
+<div class="content">
+<pre class="highlight"><code>;; This template defines a home row that customizes a single key's behaviour
+(deftemplate home-row (j-behaviour)
+  a s d f g h $j-behaviour k l ; '
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+       ;; usable even inside defsrc
+  caps (t! home-row j)                            ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+(deflayer base
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+                                 ;; lists can be passed in too!
+  caps (t! home-row (tap-hold 200 200 j lctl))    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_if_equal">if-equal</h3>
+<div class="paragraph">
+<p>Within a template you can use the list item <code>if-equal</code>
+to have conditionally-used items within a template.</p>
+</div>
+<div class="paragraph">
+<p>It accepts a minimum of 2 parameters.
+The first two parameters must be strings and are compared
+against each other.
+If they match, the following parameters are inserted into
+the template in place of the <code>if-equal</code> list.
+Otherwise if the strings do not match
+then the whole <code>if-equal</code> list is removed from the template.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example 4:</div>
+<div class="content">
+<pre>(deftemplate home-row (version)
+  a s d f g h
+  (if-equal $version v1 j)
+  (if-equal $version v2 (tap-hold 200 200 j lctl))
+   k l ; '
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps (template-expand home-row v1)                            ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+(deflayer base
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps (template-expand home-row v2)                            ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similar to <code>if-equal</code> are three more conditional operators for templates:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>if-not-equal</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>the content is used if the first two string parameters are not equal</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>if-in-list</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>the content is used if the first string parameter exists in
+the second list-of-strings parameter</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>if-not-in-list</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>the content is used if the first string parameter does not exist in
+the second list-of-strings parameter</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Example 5:</div>
+<div class="content">
+<pre>;; defvar is parsed AFTER template expansion occurs.
+(defvar a hello)
+
+(deftemplate template1 (var1)
+  a (if-equal hello $var1 b) c
+)
+
+;; Below will expand to: `a c` because the string
+;; $a itself is compared against the string hello
+;; and they are not equal.
+(template-expand template1 $a)
+
+(deftemplate template2 (var1)
+  a (if-equal $a $var1 b) c
+)
+
+;; Below will expand to: `a b c` because the string
+;; $a is compared against the string $a and they are equal.
+;; But note that the variable $a is still not substituted
+;; with its defvar value of: hello.
+(template-expand template2 $a)</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="concat-in-deftemplate">concat in deftemplate</h3>
+<div class="paragraph">
+<p>Like <a href="#concat-in-defvar">concat in defvar</a>,
+a list beginning with <code>concat</code> within the content of <code>deftemplate</code>
+will be replaced with a single string that consists of
+all the subsequent items in the list concatenated to each other.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_include_other_files">Include other files<a id="include"></a></h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -6008,6 +6540,140 @@ press and release the virtual key.</p>
 )</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="definputdevices">definputdevices</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Reference</strong></p>
+</div>
+<div class="paragraph">
+<p>The optional <code>definputdevices</code> block maps user-chosen numeric device IDs
+to physical input devices, enabling per-device key mappings via the
+<a href="#switch"><code>switch</code></a> action&#8217;s <code>(device-history $id $recency)</code> condition.</p>
+</div>
+<div class="listingblock">
+<div class="title">Syntax:</div>
+<div class="content">
+<pre class="highlight"><code>(definputdevices
+  $id1 ($matcher1a $matcher1b ...)
+  $id2 ($matcher2a ...)
+  ...
+)</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An integer from 1-255 used to reference this device in <code>(device-history $id $recency)</code> conditions. The value is arbitrary; use <code>defvar</code> to give IDs meaningful names.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>($matcher &#8230;&#8203;)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A list of matcher expressions. All matchers within an entry must match for a device to be assigned that ID (AND semantics).</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Available matchers:</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(name "&#8230;&#8203;")</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Matches devices whose product name contains the given string.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(hash "&#8230;&#8203;")</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Matches devices whose hex hash equals the given string.
+Use <code>kanata --list</code> to see device hashes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(vendor_id N)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Matches devices with the given USB vendor ID. Valid values: decimal 0-65535, or hex <code>0x0-0xFFFF</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>(product_id N)</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Matches devices with the given USB product ID. Valid values: decimal 0-65535, or hex <code>0x0-0xFFFF</code>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Description</strong></p>
+</div>
+<div class="paragraph">
+<p><code>definputdevices</code> is useful when you have multiple keyboards with different
+physical layouts and want to unify their behavior — for example, to remap
+swapped modifier key positions between Ctrl, Meta, and Alt across devices.</p>
+</div>
+<div class="paragraph">
+<p>The kanata-defined IDs are arbitrary numbers whose only purpose is referencing
+within the <code>switch</code> action&#8217;s <code>(device-history $id $recency)</code> condition.
+Using <code>defvar</code> to name them is recommended for readability.</p>
+</div>
+<div class="paragraph">
+<p>Device history only records press events (not release or repeat).
+If a key is pressed on a device not listed in <code>definputdevices</code>, the history
+slot will be recorded as "unknown" and will not match any device ID.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre class="highlight"><code>(defvar
+  id-AppleInternal 1
+  id-Go60          2
+)
+
+(definputdevices
+  $id-AppleInternal ((name "Apple Internal Keyboard"))
+  $id-Go60 ((name "Go60") (vendor_id 0x1D50) (product_id 0x615E))
+)
+
+(defsrc a)
+(deflayer base
+  (switch
+    ((device-history $id-AppleInternal  1)) x break
+    ((device-history $id-Go60           1)) y break
+    () a break))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, pressing <code>a</code> on the internal keyboard outputs <code>x</code>,
+pressing <code>a</code> on the Go60 outputs <code>y</code>, and pressing <code>a</code> on any other
+device outputs <code>a</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Device IDs are matched at startup. Devices plugged in after kanata
+starts will not be recognized. Live reload does not re-read device mappings.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Currently supported on macOS only. Linux support is planned.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -6356,6 +7022,112 @@ NOTE: For more info, see <a href="#input-chords-v2">Input chords / combos (v2)</
 </div>
 </div>
 <div class="sect2">
+<h3 id="tap-hold-require-prior-idle">tap-hold-require-prior-idle</h3>
+<div class="paragraph">
+<p>This configuration applies to all <code>tap-hold</code> variants.
+When a different physical key was pressed within the configured number of
+milliseconds before a <code>tap-hold</code> key is pressed, the <code>tap-hold</code> key will
+immediately resolve as its tap action without entering the waiting state.
+This prevents accidental modifier activations during fast typing.
+The concept is equivalent to ZMK&#8217;s <code>require-prior-idle-ms</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+For more info, see <a href="#tap-hold">tap-hold</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The default value is <code>0</code> (disabled) and the unit is milliseconds.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre class="highlight"><code>(defcfg
+  tap-hold-require-prior-idle 150
+)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If you type a normal key and then press a <code>tap-hold</code> key within the threshold,
+the <code>tap-hold</code> key immediately outputs its tap action.</p>
+</li>
+<li>
+<p>If the keyboard is idle for longer than the threshold before pressing a <code>tap-hold</code> key,
+normal <code>tap-hold</code> behavior applies (waiting state, hold on timeout, etc.).</p>
+</li>
+<li>
+<p>When <code>tap-hold-require-prior-idle</code> triggers, the tap action is chosen before any other
+<code>tap-hold</code> configuration (e.g., <code>tap-hold-opposite-hand</code>, <code>concurrent-tap-hold</code>)
+is consulted.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_per_action_override">Per-action override</h4>
+<div class="paragraph">
+<p>The global <code>tap-hold-require-prior-idle</code> value can be overridden on individual
+<code>tap-hold</code> actions using the <code>(require-prior-idle &lt;ms&gt;)</code> option.
+This is useful when most keys benefit from idle detection (e.g., home-row mods)
+but specific keys (e.g., a layer-tap key) need immediate activation even during
+fast typing.</p>
+</div>
+<div class="paragraph">
+<p>The option can be appended to any <code>tap-hold</code> variant as a trailing
+<code>(keyword value)</code> list:</p>
+</div>
+<div class="listingblock">
+<div class="title">Example: disable for a specific key</div>
+<div class="content">
+<pre class="highlight"><code>(defcfg tap-hold-require-prior-idle 150)
+(defalias
+  ;; HRMs use the global 150ms threshold
+  a (tap-hold 200 200 a lmet)
+  s (tap-hold 200 200 s lalt)
+  ;; Layer key disables idle detection for immediate activation
+  nav (tap-hold 200 200 tab (layer-toggle nav) (require-prior-idle 0))
+)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example: enable for a specific key without a global setting</div>
+<div class="content">
+<pre class="highlight"><code>(defalias
+  a (tap-hold 200 200 a lmet (require-prior-idle 150))
+)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>(require-prior-idle 0)</code> disables the feature for that action,
+even when a global threshold is set.</p>
+</li>
+<li>
+<p>A non-zero value enables or changes the threshold for that action only.</p>
+</li>
+<li>
+<p>When no per-action override is specified, the global <code>defcfg</code> value is used.</p>
+</li>
+<li>
+<p>Works with all <code>tap-hold</code> variants: <code>tap-hold</code>, <code>tap-hold-press</code>,
+<code>tap-hold-release</code>, <code>tap-hold-press-timeout</code>, <code>tap-hold-release-timeout</code>,
+<code>tap-hold-release-keys</code>, <code>tap-hold-except-keys</code>, <code>tap-hold-tap-keys</code>,
+and <code>tap-hold-opposite-hand</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="override-release-on-activation">override-release-on-activation</h3>
 <div class="paragraph">
 <p>This configuration item changes activation behaviour from <code>defoverrides</code>.</p>
@@ -6453,7 +7225,7 @@ the swapped "i" and "o" keys.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="mouse-movement-key">Linux or Windows-interception only: mouse-movement-key</h3>
+<h3 id="mouse-movement-key">Linux, macOS, or Windows-interception only: mouse-movement-key</h3>
 <div class="paragraph">
 <p>Accepts a single key name.
 When configured, whenever a mouse cursor movement is received,
@@ -6480,10 +7252,15 @@ output key mapping and cannot be supplied as an action; however, any
 key may be used.</p>
 </div>
 <div class="paragraph">
-<p>Supports live reload on Linux, but with Windows-interception, this
+<p>Supports live reload on Linux and macOS. With Windows-interception, this
 option must be present on startup to enable mouse movement event
 collection, so restart is required to enable it. Changing the key name
 is always supported, however.</p>
+</div>
+<div class="paragraph">
+<p>On macOS, this feature uses the same CGEventTap as the existing mouse
+button input support, and so requires the same Accessibility or Input
+Monitoring permission in System Settings &gt; Privacy &amp; Security.</p>
 </div>
 <div class="listingblock">
 <div class="title">Example:</div>
@@ -6822,7 +7599,7 @@ The default value is kanata.</p>
 <h3 id="linux-only-linux-output-device-bus-type">Linux only: linux-output-device-bus-type</h3>
 <div class="paragraph">
 <p>Kanata on Linux needs to declare a "bus type" for its evdev output device.
-The options are <code>USB</code> and <code>I8042</code>, with the default as <code>I8042</code>.
+The options are <code>USB</code>, <code>I8042</code>, and <code>virtual</code>, with the default as <code>I8042</code>.
 Using USB can <a href="https://github.com/jtroo/kanata/pull/661">break disable-touchpad-while-typing on Wayland</a>.
 But using I8042 appears to break <a href="https://github.com/jtroo/kanata/issues/1131">some other scenarios</a>.
 Thus the output bus type is configurable.</p>
@@ -6887,11 +7664,42 @@ This option is parsed identically to <code>linux-dev</code>.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="macos-only-macos-continue-if-no-devs-found">macOS only: macos-continue-if-no-devs-found</h3>
+<div class="paragraph">
+<p>By default, kanata will exit with an error if no input devices matching
+the configured include list are found at startup. Setting
+<code>macos-continue-if-no-devs-found</code> changes this: kanata keeps running and
+waits for matching devices to connect, then grabs them automatically.</p>
+</div>
+<div class="paragraph">
+<p>This is useful for Bluetooth or USB keyboards that may not be connected
+at boot time. When the device later appears (e.g. Bluetooth pairs, USB
+plugged in), kanata captures it and begins remapping.</p>
+</div>
+<div class="paragraph">
+<p>Works with <code>macos-dev-names-include</code> and <code>definputdevices</code>.
+This has no effect with macOS laptops when no device filter is configured
+because the default enumeration always finds the built-in keyboard.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example:</div>
+<div class="content">
+<pre class="highlight"><code>(defcfg
+  macos-dev-names-include ("My BT Keyboard")
+  macos-continue-if-no-devs-found yes
+)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="windows-only-windows-altgr">Windows only: windows-altgr</h3>
 <div class="paragraph">
-<p>There is an option for Windows to mitigate the strange behaviour of AltGr (ralt)
-if you&#8217;re using <code>process-unmapped-keys yes</code> or have the key in your defsrc.
-This is applicable for many non-US layouts.
+<p>There is an option for Windows to mitigate the strange behaviour of AltGr
+(key names: <code>ralt | altgr</code>) if you&#8217;re using <code>process-unmapped-keys yes</code>
+or have the AltGr key or the Left Control key
+in your <code>defsrc</code> or in any <code>deflayermap</code> <code>$input</code> position.
+This is applicable for many non-US layouts
+that use AltGr for adding modifier accents to characters.
 You can use one of the listed values to change what kanata does with the key:</p>
 </div>
 <div class="ulist">
@@ -6920,9 +7728,10 @@ You can use one of the listed values to change what kanata does with the key:</p
 </div>
 <div class="paragraph">
 <p>Without these workarounds,
-you should use <code>process-unmapped-keys (all-except lctl ralt))</code>,
-or use <code>process-unmapped-keys no</code>
-<strong>and</strong> also omit both <code>ralt</code> and <code>lctl</code> from <code>defsrc</code>.</p>
+within <a href="#process-unmapped-keys"><code>defcfg</code></a> you should use
+<code>process-unmapped-keys (all-except lctl ralt))</code> or <code>process-unmapped-keys no</code>
+<strong>and</strong> also omit both <code>ralt</code> and <code>lctl</code> from <code>defsrc</code>
+and any <a href="#deflayermap"><code>deflayermap</code></a> <code>$input</code> position.</p>
 </div>
 <div class="listingblock">
 <div class="title">Example:</div>
@@ -6944,7 +7753,25 @@ or use <code>process-unmapped-keys no</code>
 <td class="content">
 Even with these workarounds, putting <code>lctl</code> and <code>ralt</code> in your defsrc may not
 work properly with other applications that also use keyboard interception.
-Known application with issues: GWSL/VcXsrv
+Known application with issues: GWSL/VcXsrv.
+In this case it is recommended to ensure the keys are omitted from processing.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Even if a workaround is applied in Kanata,
+if you use other LLHOOK-using programs such as
+PowerToys Keyboard Manager or AutoHotKey (AHK),
+you can still experience issues.
+PowerToys has no workaround while with AHK
+you may be able to script your own workaround.
 </td>
 </tr>
 </table>
@@ -7525,6 +8352,14 @@ echo '{"ActOnFakeKey":{"name":"email-sig","action":"Tap"}}' | nc localhost 7070<
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{"Error":{"msg":"error description"}}</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sent when an error occurs processing a command.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{"HoldActivated":{"key":"caps"}}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sent when a tap-hold key transitions to hold state. The <code>key</code> field is the physical key name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{"TapActivated":{"key":"a"}}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sent when a tap-hold key triggers its tap action. The <code>key</code> field is the physical key name.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -7563,7 +8398,7 @@ echo '{"ActOnFakeKey":{"name":"email-sig","action":"Tap"}}' | nc localhost 7070<
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{"HelloOk":{"version":"1.11.0","protocol":1,"capabilities":[&#8230;&#8203;]}}</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Response to <code>Hello</code>. Contains server version, protocol version, and supported capabilities.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response to <code>Hello</code>. Contains server version, protocol version, and supported capabilities. Includes <code>hold-activated</code> and <code>tap-activated</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>{"ReloadResult":{"ok":true}}</code></p></td>
@@ -7608,6 +8443,10 @@ but is very verbose.</p>
 <p>By default, Kanata adds a delay before reading keyboard inputs.
 This helps protect against stale states
 when started from a terminal.</p>
+</div>
+<div class="paragraph">
+<p>Without this delay, Kanata may interpret any keys you&#8217;re still holding down when it starts
+as being stuck.</p>
 </div>
 <div class="paragraph">
 <p>However, this may be undesirable
@@ -7660,6 +8499,27 @@ in case this is an issue impacting you.</p>
 <div class="paragraph">
 <p>List keyboard names that can be used
 within defcfg and then exit.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="args-macos-release-grab-on-lock">macOS only - Release grab on lock / user switch: <code>--release-grab-on-lock</code></h3>
+<div class="paragraph">
+<p>By default, kanata&#8217;s keyboard grab on macOS stays active even when
+the screen is locked or another user takes the console via fast user
+switching. This means anyone else at the keyboard (including you on
+the lock-screen prompt) types through your remap.</p>
+</div>
+<div class="paragraph">
+<p>Pass <code>--release-grab-on-lock</code> to make kanata poll its CGSession state
+and release the grab whenever the screen is locked
+(<code>CGSSessionScreenIsLocked</code>) or kanata&#8217;s session loses the console
+(<code>kCGSSessionOnConsoleKey == false</code>). The grab is re-acquired once
+kanata&#8217;s session is back on the console with the screen unlocked.</p>
+</div>
+<div class="paragraph">
+<p>This is useful on shared Macs where another user&#8217;s lock-screen
+password or session should not be remapped. Off by default to
+preserve the historical always-grab behavior for single-user setups.</p>
 </div>
 </div>
 </div>
@@ -7941,11 +8801,29 @@ precisely, the action triggered is:</p>
 <div class="paragraph">
 <p>There are 10 special keys with names <code>nop0-nop9</code> which kanata treats specially.
 Kanata will never send OS events for these keys
-but they can still participate in sequences.</p>
+but they can still participate in sequences.
+See an example of using the nop keys below.</p>
 </div>
 <div class="paragraph">
-<p>See an example of using the nop keys
-alongside templates to define sequences below.</p>
+<p>Additionally useful to note in this example is the use of a template
+to define a sequence and its virtual key in one template expansion,
+with template parameters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>virtual key name</p>
+</li>
+<li>
+<p>activating key sequence</p>
+</li>
+<li>
+<p>action triggered by sequence activation</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This template may be useful to you within your own configuration.</p>
 </div>
 <div class="listingblock">
 <div class="title">Example:</div>
@@ -8310,270 +9188,6 @@ $env:VAR_NAME = "var_value"
 
 # bash
 VAR_NAME=var_value</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="templates">Templates</h3>
-<div class="paragraph">
-<p>The top-level configuration item <code>deftemplate</code>
-declares a template that can be expanded multiple times
-via the list item <code>template-expand</code>.
-The short form of <code>template-expand</code> is <code>t!</code>.</p>
-</div>
-<div class="paragraph">
-<p>The parameters to <code>deftemplate</code> in order are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Template name</p>
-</li>
-<li>
-<p>List of template variables</p>
-</li>
-<li>
-<p>Template content (any combination of lists / strings)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Within the template content, variable names prefixed with <code>$</code>
-will be substituted with the expression passed into <code>template-expand</code>.</p>
-</div>
-<div class="paragraph">
-<p>The list item <code>template-expand</code> can be placed as a top-level list
-or within another list.
-Its parameters in order are:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>template name</p>
-</li>
-<li>
-<p>parameters to substitute into the template</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Template expansion happens after file includes and before any other parsing.
-One consequence of this early parsing is that variables defined in <code>defvar</code>
-are <strong>not</strong> substituted when used inside of <code>template-expand</code>.
-This has consequences for condtional content, e.g. with <code>if-equal</code>.
-This is discussed further in Example 5.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Example 1:</p>
-</div>
-<div class="paragraph">
-<p>In a simple example, let&#8217;s say you wanted to set a large group of keys
-to do something different when you&#8217;re holding alt. Yes, this could also
-be handled with remapping alt to a layer shift, but there are cases where
-you wouldn&#8217;t want this. Rather than retyping the code with <code>fork</code> and
-<code>unmod</code> (to release alt) a bunch of times, you could template it like so:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>(deftemplate alt-fork (original-action new-action)
-  (fork $original-action (multi (unmod (ralt lalt) nop0) $new-action) (lalt ralt))
-)
-(defsrc 1 2 3)
-(defalias fn1 (template-expand alt-fork 1 f1))
-;; Templates are a simple text substitution, so the above is exactly equivalent to:
-;; (defalias fn1 (fork 1 (multi (unmod (ralt lalt) nop0) f1) (lalt ralt)))
-(defalias fn2 (template-expand alt-fork 2 f2))
-;; You can use t! as a short form of template-expand
-(defalias fn3 (t! alt-fork 3 f3))
-(deflayer default @fn1 @fn2 @fn3)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example 2:</div>
-<div class="content">
-<pre class="highlight"><code>(defvar chord-timeout 200)
-(defcfg process-unmapped-keys yes)
-
-;; This template defines a chord group and aliases that use the chord group.
-;; The purpose is to easily define the same chord position behaviour
-;; for multiple layers that have different underlying keys.
-(deftemplate left-hand-chords (chordgroupname k1 k2 k3 k4 alias1 alias2 alias3 alias4)
-  (defalias
-    $alias1 (chord $chordgroupname $k1)
-    $alias2 (chord $chordgroupname $k2)
-    $alias3 (chord $chordgroupname $k3)
-    $alias4 (chord $chordgroupname $k4)
-  )
-  (defchords $chordgroupname $chord-timeout
-    ($k1) $k1
-    ($k2) $k2
-    ($k3) $k3
-    ($k4) $k4
-    ($k1 $k2) lctl
-    ($k3 $k4) lsft
-  )
-)
-
-(template-expand left-hand-chords qwerty a s d f qwa qws qwd qwf)
-;; t! is short for template-expand
-(t! left-hand-chords dvorak a o e u dva dvo dve dvu)
-
-(defsrc a s d f)
-(deflayer dvorak @dva @dvo @dve @dvu)
-(deflayer qwerty @qwa @qws @qwd @qwf)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example 3:</div>
-<div class="content">
-<pre class="highlight"><code>;; This template defines a home row that customizes a single key's behaviour
-(deftemplate home-row (j-behaviour)
-  a s d f g h $j-behaviour k l ; '
-)
-
-(defsrc
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-       ;; usable even inside defsrc
-  caps (t! home-row j)                            ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet rctl
-)
-
-(deflayer base
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-                                 ;; lists can be passed in too!
-  caps (t! home-row (tap-hold 200 200 j lctl))    ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet rctl
-)</code></pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_if_equal">if-equal</h4>
-<div class="paragraph">
-<p>Within a template you can use the list item <code>if-equal</code>
-to have condiditionally-used items within a template.</p>
-</div>
-<div class="paragraph">
-<p>It accepts a minimum of 2 parameters.
-The first two parameters must be strings and are compared
-against each other.
-If they match, the following parameters are inserted into
-the template in place of the <code>if-equal</code> list.
-Otherwise if the strings do not match
-then the whole <code>if-equal</code> list is removed from the template.</p>
-</div>
-<div class="listingblock">
-<div class="title">Example 4:</div>
-<div class="content">
-<pre>(deftemplate home-row (version)
-  a s d f g h
-  (if-equal $version v1 j)
-  (if-equal $version v2 (tap-hold 200 200 j lctl))
-   k l ; '
-)
-
-(defsrc
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  caps (template-expand home-row v1)                            ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet rctl
-)
-
-(deflayer base
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  caps (template-expand home-row v2)                            ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet rctl
-)</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Similar to <code>if-equal</code> are three more conditional operators for templates:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>if-not-equal</code></p>
-<div class="ulist">
-<ul>
-<li>
-<p>the content is used if the first two string parameters are not equal</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><code>if-in-list</code></p>
-<div class="ulist">
-<ul>
-<li>
-<p>the content is used if the first string parameter exists in
-the second list-of-strings parameter</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><code>if-not-in-list</code></p>
-<div class="ulist">
-<ul>
-<li>
-<p>the content is used if the first string parameter does not exist in
-the second list-of-strings parameter</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="title">Example 5:</div>
-<div class="content">
-<pre>;; defvar is parsed AFTER template expansion occurs.
-(defvar a hello)
-
-(deftemplate template1 (var1)
-  a (if-equal hello $var1 b) c
-)
-
-;; Below will expand to: `a c` because the string
-;; $a itself is compared against the string hello
-;; and they are not equal.
-(template-expand template1 $a)
-
-(deftemplate template2 (var1)
-  a (if-equal $a $var1 b) c
-)
-
-;; Below will expand to: `a b c` because the string
-;; $a is compared against the string $a and they are equal.
-;; But note that the variable $a is still not substituted
-;; with its defvar value of: hello.
-(template-expand template2 $a)</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="concat-in-deftemplate">concat in deftemplate</h4>
-<div class="paragraph">
-<p>Like <a href="#concat-in-defvar">concat in defvar</a>,
-a list beginning with <code>concat</code> within the content of <code>deftemplate</code>
-will be replaced with a single string that consists of
-all the subsequent items in the list concatenated to each other.</p>
 </div>
 </div>
 </div>
